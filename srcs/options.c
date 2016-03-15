@@ -15,7 +15,7 @@
 #include "printf.h"
 #include "libft.h"
 
-void			ft_handle_invalid_option(unsigned char option, t_opt *options)
+static void		ft_handle_invalid_option(unsigned char option, t_opt *options)
 {
 	ft_printf("ls: illegal option -- %c\n", option);
 	ft_printf("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]\n");
@@ -23,8 +23,11 @@ void			ft_handle_invalid_option(unsigned char option, t_opt *options)
 	exit(INVALID_OPTION);
 }
 
-static t_opt	*ft_parse_options(t_opt *options, char **av, int i)
+static t_opt	*ft_parse_options(t_opt *options, char **av, int index)
 {
+	int i;
+
+	i = index;
 	while (av[1][i])
 	{
 		if (av[1][i] == 'l')

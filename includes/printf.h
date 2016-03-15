@@ -6,7 +6,7 @@
 /*   By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/29 13:20:36 by ddela-cr          #+#    #+#             */
-/*   Updated: 2016/03/11 16:49:06 by ddela-cr         ###   ########.fr       */
+/*   Updated: 2016/03/15 11:31:06 by ddela-cr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 # define ANSI_COLOR_DEFAULT	"\x1b[39m"
 # define ANSI_COLOR_RESET	"\x1b[0m"
 
-typedef	int			t_bool;
+typedef	unsigned char	t_bool;
 
 typedef	int			t_width;
 typedef	int			t_precision;
