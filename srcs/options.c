@@ -10,10 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 	
-#include <stdlib.h>
 #include "ft_ls.h"
-#include "printf.h"
-#include "libft.h"
 
 static void		ft_handle_invalid_option(unsigned char option, t_opt *options)
 {
@@ -23,11 +20,11 @@ static void		ft_handle_invalid_option(unsigned char option, t_opt *options)
 	exit(INVALID_OPTION);
 }
 
-static t_opt	*ft_parse_options(t_opt *options, char **av, int index)
+static t_opt	*ft_parse_options(t_opt *options, char **av)
 {
 	int i;
 
-	i = index;
+	i = 1;
 	while (av[1][i])
 	{
 		if (av[1][i] == 'l')
@@ -71,20 +68,13 @@ static t_opt	*ft_init_options()
 
 t_opt	*ft_get_options(int ac, char **av)
 {
-	t_opt	*options;
 	int		len;
-	int		index;
+	t_opt	*options;
 
-	options = ft_init_options();
 	len = ft_strlen(av[1]);
-	index = 1;
+	options = ft_init_options();
 	if (ac > 1 && av[1][0] == '-' && len > 1) 
-	{
-		if (av[1][1] == '-' && len == 2)
-			return (options);
-		else
-			index = 2;
-		options = ft_parse_options(options, av, index);
-	}
+		if (!(av[1][1] == '-' && len == 2))
+			options = ft_parse_options(options, av);
 	return (options);
 }

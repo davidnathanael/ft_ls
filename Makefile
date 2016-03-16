@@ -6,7 +6,7 @@
 #    By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/14 12:04:07 by ddela-cr          #+#    #+#              #
-#    Updated: 2016/03/14 14:35:54 by ddela-cr         ###   ########.fr        #
+#    Updated: 2016/03/16 14:03:00 by ddela-cr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAMEBASE    =   $(shell basename $(NAME))
 
 CC			=	gcc
 
-FLAGS		=	-Wall -Wextra -Werror
+FLAGS		=	-g -Wall -Wextra -Werror
 
 SRCDIR		=	srcs/
 
@@ -31,6 +31,7 @@ LIBFT_LIB	=	libft/libft.a
 LIBFTPRINTF_LIB	=	libftprintf/libftprintf.a
 
 SRCBASE		=	\
+				command.c													\
 				debug.c														\
 				ft_ls.c														\
 				main.c														\
