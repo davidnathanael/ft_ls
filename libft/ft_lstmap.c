@@ -1,32 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi_uns_long.c                                 :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/25 19:13:51 by ddela-cr          #+#    #+#             */
-/*   Updated: 2016/01/21 22:31:55 by ddela-cr         ###   ########.fr       */
+/*   Created: 2015/11/27 14:02:12 by ddela-cr          #+#    #+#             */
+/*   Updated: 2015/11/30 16:04:57 by ddela-cr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-unsigned long		ft_atoi_uns_long(const char *str)
+t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	unsigned long		ret;
-	unsigned int		i;
+	t_list	*new;
+	t_list	*crt;
 
-	ret = 0;
-	i = 0;
-	while (str[i] == ' ' || (str[i] > 8 && str[i] < 14))
-		i++;
-	if (str[i] == '+')
-		i++;
-	while (str[i] >= '0' && str[i] <= '9')
+	crt = (*f)(lst);
+	if (crt == NULL)
+		return (NULL);
+	new = crt;
+	lst = lst->next;
+	while (lst)
 	{
-		ret = (ret * 10) + (str[i] - '0');
-		i++;
+		crt->next = (*f)(lst);
+		if (crt->next == NULL)
+			return (NULL);
+		crt = crt->next;
+		lst = lst->next;
 	}
-	return (ret);
+	return (new);
 }

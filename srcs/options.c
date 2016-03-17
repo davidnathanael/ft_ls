@@ -12,7 +12,7 @@
 	
 #include "ft_ls.h"
 
-static void		ft_handle_invalid_option(unsigned char option, t_opt *options)
+static void		ft_handle_invalid_ls_option(unsigned char option, t_opt *options)
 {
 	ft_printf("ls: illegal option -- %c\n", option);
 	ft_printf("usage: ls [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1] [file ...]\n");
@@ -20,7 +20,7 @@ static void		ft_handle_invalid_option(unsigned char option, t_opt *options)
 	exit(INVALID_OPTION);
 }
 
-static t_opt	*ft_parse_options(t_opt *options, char **av)
+static t_opt	*ft_parse_ls_options(t_opt *options, char **av)
 {
 	int i;
 
@@ -40,7 +40,7 @@ static t_opt	*ft_parse_options(t_opt *options, char **av)
 		else if (av[1][i] == '1')
 			options->one = TRUE;
 		else
-			ft_handle_invalid_option(av[1][i], options);
+			ft_handle_invalid_ls_option(av[1][i], options);
 		i++;
 	}
 	if (options->l || options->r_upper || options->a || options->r || options->t
@@ -49,7 +49,7 @@ static t_opt	*ft_parse_options(t_opt *options, char **av)
 	return (options);
 }
 
-static t_opt	*ft_init_options()
+static t_opt	*ft_init_ls_options()
 {
 	t_opt	*options;
 
@@ -66,15 +66,15 @@ static t_opt	*ft_init_options()
 	return (options);
 }
 
-t_opt	*ft_get_options(int ac, char **av)
+t_opt	*ft_get_ls_options(int ac, char **av)
 {
 	int		len;
 	t_opt	*options;
 
 	len = ft_strlen(av[1]);
-	options = ft_init_options();
+	options = ft_init_ls_options();
 	if (ac > 1 && av[1][0] == '-' && len > 1) 
 		if (!(av[1][1] == '-' && len == 2))
-			options = ft_parse_options(options, av);
+			options = ft_parse_ls_options(options, av);
 	return (options);
 }

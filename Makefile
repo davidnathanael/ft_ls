@@ -6,7 +6,7 @@
 #    By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/14 12:04:07 by ddela-cr          #+#    #+#              #
-#    Updated: 2016/03/16 14:03:00 by ddela-cr         ###   ########.fr        #
+#    Updated: 2016/03/17 16:19:45 by ddela-cr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,11 +31,13 @@ LIBFT_LIB	=	libft/libft.a
 LIBFTPRINTF_LIB	=	libftprintf/libftprintf.a
 
 SRCBASE		=	\
-				command.c													\
+				check_args.c												\
 				debug.c														\
 				ft_ls.c														\
+				ls_command.c												\
 				main.c														\
-				options.c
+				options.c													\
+				sort_utils.c
 
 INCBASE		=	\
 				ft_ls.h														\
