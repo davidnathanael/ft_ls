@@ -20,27 +20,27 @@ static void		ft_handle_invalid_ls_option(unsigned char option, t_opt *options)
 	exit(INVALID_OPTION);
 }
 
-static t_opt	*ft_parse_ls_options(t_opt *options, char **av)
+static t_opt	*ft_parse_ls_options(t_opt *options, char *arg)
 {
 	int i;
 
 	i = 1;
-	while (av[1][i])
+	while (arg[i])
 	{
-		if (av[1][i] == 'l')
+		if (arg[i] == 'l')
 			options->l = TRUE;
-		else if (av[1][i] == 'R')
+		else if (arg[i] == 'R')
 			options->r_upper = TRUE;
-		else if (av[1][i] == 'a')
+		else if (arg[i] == 'a')
 			options->a = TRUE;
-		else if (av[1][i] == 'r')
+		else if (arg[i] == 'r')
 			options->r = TRUE;
-		else if (av[1][i] == 't')
+		else if (arg[i] == 't')
 			options->t = TRUE;
-		else if (av[1][i] == '1')
+		else if (arg[i] == '1')
 			options->one = TRUE;
 		else
-			ft_handle_invalid_ls_option(av[1][i], options);
+			ft_handle_invalid_ls_option(arg[i], options);
 		i++;
 	}
 	if (options->l || options->r_upper || options->a || options->r || options->t
@@ -66,15 +66,27 @@ static t_opt	*ft_init_ls_options()
 	return (options);
 }
 
-t_opt	*ft_get_ls_options(int ac, char **av)
+t_opt	*ft_get_ls_options(char **av)
 {
 	int		len;
+	int		i;
 	t_opt	*options;
 
-	len = ft_strlen(av[1]);
+	len = 0;
+	i = 1;
 	options = ft_init_ls_options();
-	if (ac > 1 && av[1][0] == '-' && len > 1) 
-		if (!(av[1][1] == '-' && len == 2))
-			options = ft_parse_ls_options(options, av);
+	if (!options)
+		return (NULL);
+	while (av[i] && av[i][0] == '-')
+	{
+		len = ft_strlen(av[i]);
+		if ((av[i][1] == '-' && len == 2) || len <= 1)
+		{
+			return (options);
+		}
+		else
+			options = ft_parse_ls_options(options, av[i]);
+		i++;
+	}
 	return (options);
 }

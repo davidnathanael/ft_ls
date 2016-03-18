@@ -14,20 +14,29 @@
 
 void	ft_debug_options(t_opt *options)
 {
-	ft_printf("has_options -> {red}%d{eoc}\n", options->has_options);
-	ft_printf("l -> {red}%d{eoc}\n", options->l);
-	ft_printf("R -> {red}%d{eoc}\n", options->r_upper);
-	ft_printf("a -> {red}%d{eoc}\n", options->a);
-	ft_printf("r -> {red}%d{eoc}\n", options->r);
-	ft_printf("t -> {red}%d{eoc}\n", options->t);
-	ft_printf("1 -> {red}%d{eoc}\n", options->one);
+	ft_printf("{red}------OPTIONS------{eoc}\n");
+	ft_printf("l -> {green}%d{eoc}\n", options->l);
+	ft_printf("R -> {green}%d{eoc}\n", options->r_upper);
+	ft_printf("a -> {green}%d{eoc}\n", options->a);
+	ft_printf("r -> {green}%d{eoc}\n", options->r);
+	ft_printf("t -> {green}%d{eoc}\n", options->t);
+	ft_printf("1 -> {green}%d{eoc}\n", options->one);
 }
 
 void	ft_debug_ls(t_ls *ls)
 {
-	ft_printf("has_options -> {red}%d{eoc}\n", ls->has_options);
-	ft_printf("has_args -> {red}%d{eoc}\n", ls->has_args);
-	ft_printf("nb_args -> {red}%d{eoc}\n", (int)ls->nb_args);
+	int		nb_args = ls->nb_args;
+	int		i = 0;
+
+	ft_printf("{red}------LS INFOS------{eoc}\n");
+	ft_printf("has_options -> {green}%d{eoc}\n", ls->has_options);
+	ft_printf("has_args -> {green}%d{eoc}\n", ls->has_args);
+	ft_printf("nb_args -> {green}%d{eoc}\n", (int)ls->nb_args);
+	while (i < nb_args)
+	{
+		ft_printf("args[%d] -> {blue}%s{eoc}\n", i, ls->args[i]);
+		i++;
+	}
 }
 
 void	ft_debug_list_dir(char *name)

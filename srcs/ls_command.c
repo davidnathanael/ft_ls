@@ -12,85 +12,34 @@
 
 #include "ft_ls.h"
 
-t_bool			ft_is_ent(char *name, char *path)
+void			ft_free_ls_args(t_ls *ls)
 {
-	DIR			*dirp;
-	t_dirent	*dp;
+	unsigned int	nb_args;
 
-	dirp = opendir(path);
-	if (dirp == NULL)
-	{
-		ft_printf("opendir() failed.\n");
-		return FALSE;
-	}
-	while ((dp = readdir(dirp)) != NULL)
-	{
-		if (ft_strcmp(dp->d_name, name) == 0)
-		{
-			(void)closedir(dirp);
-			return (TRUE);
-		}
-	}
-	(void)closedir(dirp);
-	return (FALSE);
+	nb_args = ls->nb_args;
+	while (--nb_args <= 0)
+		free(ls->args[nb_args]);
+	free(ls);
 }
 
-static void		ft_sort_av(t_ls *ls, char **av)
+static t_bool	ft_has_ls_args(t_ls *ls, char **av)
 {
 	unsigned int		i;
-	unsigned int		j;
-	char				tmp[BUFF_SIZE];
+	size_t				len;
+	t_bool				no_more_options;	
 
-	i = 1 + ls->has_options + 1; // argv[0] + options + 1 for sort
-	j = 1 + ls->has_options + 1;
-	while (i <= ls->nb_args + ls->has_options + 1)	
+	i = 0;
+	len = 0;
+	no_more_options = FALSE;
+	while (av[++i])
 	{
-		while (j <= ls->nb_args + ls->has_options + 1)	
-		{
-			ft_printf("i : %d | j : %d\n", i , j);
-			if (ft_strcmp(av[j - 1], av[j]) > 0) {
-	for (unsigned int k = 0; k < ls->has_options + 1 + ls->nb_args; k++)
-	{
-		ft_printf("%s ", av[k]);
+		len = ft_strlen(av[i]);
+		if (av[i][0] != '-' || len == 1 || (len == 2 && av[i][1] == '-'))
+			no_more_options = TRUE;
+		if (no_more_options)
+			ls->nb_args++;
 	}
-				printf("\ntmp : %s | av[%d] : %s | av[%d] : %s \n", tmp, j - 1, av[j - 1], j, av[j]);
-				ft_strcpy(tmp, av[j - 1]);
-				ft_strcpy(av[j - 1], av[j]);
-				ft_strcpy(av[j], tmp);
-				printf("tmp : %s | av[%d] : %s | av[%d] : %s \n", tmp, j - 1, av[j - 1], j, av[j]);
-			}
-			j++;
-		}
-		j = 1 + ls->has_options + 1;
-		i++;
-	}
-}
-
-static t_list	*ft_parse_ls_args(t_ls *ls, char **av)
-{
-	unsigned int		i;
-
-	i = (ls->has_options) ? 2 : 1;
-	ft_printf("BEFORE\n\n");
-	for (unsigned int k = 0; k < ls->has_options + 1 + ls->nb_args; k++)
-	{
-		ft_printf("av[%d] : %s\n", (int)k, av[k]);
-	}
-	ft_sort_av(ls, av);
-	ft_printf("AFTER\n\n");
-	for (unsigned int k = 0; k < ls->has_options + 1 + ls->nb_args; k++)
-	{
-		ft_printf("av[%d] : %s\n", (int)k, av[k]);
-	}
-	while (av[i])	
-	{
-		if (ft_is_ent(av[i], "."))
-			;
-		else
-			ft_printf("ls: %s: No such file or directory\n", av[i]);
-		i++;
-	}
-	return (NULL);
+	return ((ls->nb_args > 0) ? TRUE : FALSE);
 }
 
 static t_ls		*ft_set_ls_args(int ac, char **av, t_ls *ls)
@@ -98,13 +47,18 @@ static t_ls		*ft_set_ls_args(int ac, char **av, t_ls *ls)
 	unsigned int		i;
 
 	i = 0;
-	if (ls->has_options)
-		ls->has_args = (ac > 2) ? TRUE : FALSE;
-	else
-		ls->has_args = (ac > 1) ? TRUE : FALSE;
-	ls->nb_args = (ls->has_options) ? ac - 2 : ac - 1;
-	if (ls->has_args)
-		ls->args = ft_parse_ls_args(ls, av);
+	(void)ac;
+	ls->has_args = ft_has_ls_args(ls, av);
+	ls->args = (char **)malloc(sizeof(char *) * ls->nb_args + 1);
+	if (!ls->args)
+		return (NULL);
+	i = 0;
+	while (i < ls->nb_args)	
+	{
+		ls->args[i] = ft_strdup(av[1 + ls->has_options + i]);
+		i++;
+	}
+	ls->args[i] = NULL;
 	return (ls);
 }
 

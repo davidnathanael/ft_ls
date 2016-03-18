@@ -45,7 +45,7 @@ typedef struct			s_ls
 	t_bool				has_options;
 	t_bool				has_args;
 	unsigned int		nb_args;
-	t_list				*args;
+	char				**args;
 }						t_ls;
 
 typedef struct 			s_arg
@@ -56,22 +56,9 @@ typedef struct 			s_arg
 	struct s_arg		*next;
 }						t_arg;
 
-typedef struct 			s_dir
-{
-	struct s_dir		*parent;
-	struct s_dir		*first_child;
-	struct s_dir		*next_sibling;
-}						t_dir;
-
-typedef struct 			s_tree
-{
-	t_dir				*root;
-	unsigned int		nb_elems;
-}						t_tree;
-
 void					ft_ls(int ac, char **av);
 
-t_opt					*ft_get_ls_options(int ac, char **av);
+t_opt					*ft_get_ls_options(char **av);
 t_ls					*ft_get_ls_args(int ac, char **av, t_opt *options);
 void					ft_free_args(t_ls *ls);
 
