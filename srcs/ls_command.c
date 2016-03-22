@@ -26,7 +26,7 @@ static t_bool	ft_has_ls_args(t_ls *ls, char **av)
 {
 	unsigned int		i;
 	size_t				len;
-	t_bool				no_more_options;	
+	t_bool				no_more_options;
 
 	i = 0;
 	len = 0;
@@ -53,7 +53,7 @@ static t_ls		*ft_set_ls_args(int ac, char **av, t_ls *ls)
 	if (!ls->args)
 		return (NULL);
 	i = 0;
-	while (i < ls->nb_args)	
+	while (i < ls->nb_args)
 	{
 		ls->args[i] = ft_strdup(av[1 + ls->has_options + i]);
 		i++;

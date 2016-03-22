@@ -28,13 +28,14 @@
 
 typedef unsigned char	t_bool;
 typedef struct dirent	t_dirent;
+typedef struct stat		t_stat;
 
 typedef struct			s_opt
 {
 	t_bool				has_options;
 	t_bool				l;
 	t_bool				r_upper;
-	t_bool				a;
+	t_bool				 a;
 	t_bool				r;
 	t_bool				t;
 	t_bool				one;
@@ -48,13 +49,12 @@ typedef struct			s_ls
 	char				**args;
 }						t_ls;
 
-typedef struct 			s_arg
+typedef struct 			s_ent
 {
 	char				*name;
 	char				*filepath;
 	t_bool				isdir;
-	struct s_arg		*next;
-}						t_arg;
+}						t_ent;
 
 void					ft_ls(int ac, char **av);
 
