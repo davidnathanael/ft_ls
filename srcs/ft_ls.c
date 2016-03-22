@@ -41,29 +41,6 @@ char			*ft_get_full_path(const char *dir_name, const char *d_name)
 	return (ret);
 }
 
-DIR				*ft_opendir(char *dir_name)
-{
-	DIR			*dir;
-	
-	dir = opendir (dir_name);
-	if (!dir)
-	{
-		fprintf (stderr, "Cannot open directory '%s': %s\n",
-			dir_name, strerror (errno));
-		exit (EXIT_FAILURE);
-	}
-	return (dir);
-}
-
-void			ft_closedir(DIR *dir, const char *dir_name)
-{
-	if (closedir (dir)) {
-		fprintf (stderr, "Could not close '%s': %s\n",
-			dir_name, strerror (errno));
-		exit (EXIT_FAILURE);
-	}	
-}
-
 static void		ft_list_dir(char *dir_name, t_opt *options)		
 {
 	DIR			*d;

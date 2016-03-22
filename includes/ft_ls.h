@@ -58,6 +58,9 @@ typedef struct 			s_ent
 
 void					ft_ls(int ac, char **av);
 
+DIR						*ft_opendir(char *dir_name);
+void					ft_closedir(DIR *dir, const char *dir_name);
+
 t_opt					*ft_get_ls_options(char **av);
 t_ls					*ft_get_ls_args(int ac, char **av, t_opt *options);
 void					ft_free_args(t_ls *ls);
