@@ -13,10 +13,40 @@
 #include "ft_ls.h"
 #include <limits.h>
 
+void		ft_proceed_r_upper(char *dir_name, char *d_name, t_opt *options);
+
+t_bool			ft_is_dir(const char *path)
+{
+   struct stat statbuf;
+   if (stat(path, &statbuf) != 0)
+       return 0;
+   return S_ISDIR(statbuf.st_mode);
+}
+
+t_bool			ft_is_dot(const char *d_name)
+{
+    if (ft_strcmp (d_name, "..") != 0 && ft_strcmp (d_name, ".") != 0)
+    	return (FALSE);
+    return (TRUE);
+}
+
+char			*ft_get_full_path(const char *dir_name, const char *d_name)
+{
+	char		*ret;
+	char		*tmp;
+
+	tmp = ft_strjoin(dir_name, "/");
+	ret = ft_strjoin(tmp, d_name);
+	free(tmp);
+	return (ret);
+}
+
 static void		ft_list_dir(char *dir_name, t_opt *options)		
 {
-	(void)	options;
-	DIR		*d;
+	DIR			*d;
+    t_dirent	*entry;
+    const char	*d_name;
+    char		*fullpath;
 
     d = opendir (dir_name);
     if (! d)
@@ -25,39 +55,39 @@ static void		ft_list_dir(char *dir_name, t_opt *options)
                  dir_name, strerror (errno));
         exit (EXIT_FAILURE);
     }
-    while (1)
+    while ((entry = readdir (d)) != NULL)
     {
-        t_dirent	*entry;
-        const char	*d_name;
-
-        entry = readdir (d);
-        if (! entry)
-            break;
         d_name = entry->d_name;
-		printf ("%s/%s\n", dir_name, d_name);
-        if (entry->d_type & DT_DIR)
-        {
-            if (strcmp (d_name, "..") != 0 && strcmp (d_name, ".") != 0)
-            {
-                int path_length;
-                char path[PATH_MAX];
- 
-                path_length = snprintf (path, PATH_MAX,
-                                        "%s/%s", dir_name, d_name);
-                printf ("%s\n", path);
-                if (path_length >= PATH_MAX) {
-                    fprintf (stderr, "Path length has got too long.\n");
-                    exit (EXIT_FAILURE);
-                }
-                ft_list_dir (path, options);
-            }
-		}
+		fullpath = ft_get_full_path(dir_name, d_name);
+        if (!ft_is_dot(d_name))
+			printf ("%s/%s\n", dir_name, d_name);
+        if (ft_is_dir(fullpath) && options->r_upper)
+        	ft_proceed_r_upper(dir_name, (char *)d_name, options);
+        free(fullpath);
     }
     if (closedir (d)) {
         fprintf (stderr, "Could not close '%s': %s\n",
                  dir_name, strerror (errno));
         exit (EXIT_FAILURE);
     }	
+}
+
+void		ft_proceed_r_upper(char *dir_name, char *d_name, t_opt *options)
+{
+    int path_length;
+    char path[PATH_MAX];
+
+    if (!ft_is_dot(d_name))
+    {
+
+        path_length = snprintf (path, PATH_MAX,
+                                "%s/%s", dir_name, d_name);
+        if (path_length >= PATH_MAX) {
+            fprintf (stderr, "Path length has got too long.\n");
+            exit (EXIT_FAILURE);
+        }
+        ft_list_dir (path, options);
+    }
 }
 
 void			ft_ls(int ac, char **av)
