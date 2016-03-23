@@ -52,3 +52,21 @@ void	ft_debug_list_dir(char *name)
 	(void)closedir(dirp);
 }
 
+
+void ft_debug_list(t_list *list)
+{
+	t_list	*tmp;
+	t_ent	*content;
+
+	tmp = list;
+	content = NULL;
+	ft_printf("{red}------LIST INFOS------{eoc}\n");
+	while (tmp)
+	{
+		content = tmp->content;
+		ft_printf("name : %s\n", content->name);
+		ft_printf("filepath : %s\n", content->filepath);
+		ft_printf("isdir : %s\n\n", (content->isdir) ? "TRUE" : "FALSE");
+		tmp = tmp->next;
+	}
+}

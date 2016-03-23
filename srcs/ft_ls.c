@@ -15,13 +15,6 @@
 
 void		ft_proceed_r_upper(char *dir_name, char *d_name, t_opt *options);
 
-t_bool			ft_is_dir(const char *path)
-{
-	t_stat		statbuf;
-	if (stat(path, &statbuf) != 0)
-		return (0);
-	return S_ISDIR(statbuf.st_mode);
-}
 
 t_bool			ft_is_dot(const char *d_name)
 {
@@ -43,23 +36,27 @@ char			*ft_get_full_path(const char *dir_name, const char *d_name)
 
 static void		ft_list_dir(char *dir_name, t_opt *options)		
 {
-	DIR			*d;
-	t_dirent	*entry;
-	const char	*d_name;
-	char		*fullpath;
+	t_list		*list;
+	t_list		*tmp;
+	t_ent		*ent;
 
-	d = ft_opendir(dir_name);
-	while ((entry = readdir (d)) != NULL)
+	list = ft_get_sorted_list(dir_name, options);
+	ft_debug_list(list);
+	tmp = list;
+	while (tmp)
 	{
-		d_name = entry->d_name;
-		fullpath = ft_get_full_path(dir_name, d_name);
-		if (!ft_is_dot(d_name))
-			printf ("%s/%s\n", dir_name, d_name);
-		if (ft_is_dir(fullpath) && options->r_upper)
-			ft_proceed_r_upper(dir_name, (char *)d_name, options);
-		free(fullpath);
+		ent = tmp->content;
+		printf("%s\n", ent->name);
+		tmp = tmp->next;
 	}
-	ft_closedir(d, dir_name);
+	tmp = list;
+	while (tmp)
+	{
+		ent = tmp->content;
+		if (ent->isdir && options->r_upper)
+			ft_proceed_r_upper(dir_name, ent->name, options);
+		tmp = tmp->next;
+	}
 }
 
 void		ft_proceed_r_upper(char *dir_name, char *d_name, t_opt *options)
@@ -69,7 +66,7 @@ void		ft_proceed_r_upper(char *dir_name, char *d_name, t_opt *options)
 
 	if (!ft_is_dot(d_name))
 	{
-
+		ft_printf("\n%s/%s:\n", dir_name, d_name);
 		path_length = snprintf (path, PATH_MAX,
 			"%s/%s", dir_name, d_name);
 		if (path_length >= PATH_MAX) {
@@ -87,9 +84,9 @@ void			ft_ls(int ac, char **av)
 
 	options = ft_get_ls_options(av);
 	ls = ft_get_ls_args(ac, av, options);
-	ft_debug_options(options);
-	ft_debug_ls(ls);
-	ft_printf("\n\n\n\n");
+	// ft_debug_options(options);
+	// ft_debug_ls(ls);
+	// ft_printf("\n\n\n\n");
 	if (!ls->has_args)
 		ft_list_dir(".", options);
 	else

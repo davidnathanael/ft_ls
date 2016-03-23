@@ -14,6 +14,8 @@
 
 t_bool		ft_sort_util_alpha(char *elem1, char *elem2)
 {
+	if (!elem2)
+		return (TRUE);
 	if (ft_strcmp(elem1, elem2) <= 0)
 		return (TRUE);
 	return (FALSE);
@@ -21,6 +23,8 @@ t_bool		ft_sort_util_alpha(char *elem1, char *elem2)
 
 t_bool		ft_sort_util_alpharev(char *elem1, char *elem2)
 {
+	if (!elem2)
+		return (TRUE);
 	if (ft_strcmp(elem1, elem2) <= 0)
 		return (FALSE);
 	return (TRUE);

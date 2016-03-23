@@ -60,16 +60,20 @@ void					ft_ls(int ac, char **av);
 
 DIR						*ft_opendir(char *dir_name);
 void					ft_closedir(DIR *dir, const char *dir_name);
+t_bool					ft_is_dir(const char *path);
+char					*ft_get_full_path(const char *dir_name, const char *d_name);
 
 t_opt					*ft_get_ls_options(char **av);
 t_ls					*ft_get_ls_args(int ac, char **av, t_opt *options);
 void					ft_free_args(t_ls *ls);
 
+t_list					*ft_get_sorted_list(char *dir_name, t_opt *options);
 t_bool					ft_sort_util_alpha(char *elem1, char *elem2);
 t_bool					ft_sort_util_alpharev(char *elem1, char *elem2);
 
 void					ft_debug_options(t_opt *options);
 void					ft_debug_ls(t_ls *ls);
 void					ft_debug_list_dir(char *name);
+void 					ft_debug_list(t_list *list);
 
 #endif

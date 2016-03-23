@@ -34,3 +34,11 @@ void			ft_closedir(DIR *dir, const char *dir_name)
 		exit (EXIT_FAILURE);
 	}	
 }
+
+t_bool			ft_is_dir(const char *path)
+{
+	t_stat		statbuf;
+	if (stat(path, &statbuf) != 0)
+		return (0);
+	return S_ISDIR(statbuf.st_mode);
+}
