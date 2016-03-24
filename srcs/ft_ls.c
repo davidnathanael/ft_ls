@@ -41,7 +41,7 @@ static void		ft_list_dir(char *dir_name, t_opt *options)
 	t_ent		*ent;
 
 	list = ft_get_sorted_list(dir_name, options);
-	ft_debug_list(list);
+	// ft_debug_list(list);
 	tmp = list;
 	while (tmp)
 	{
@@ -84,9 +84,9 @@ void			ft_ls(int ac, char **av)
 
 	options = ft_get_ls_options(av);
 	ls = ft_get_ls_args(ac, av, options);
-	// ft_debug_options(options);
-	// ft_debug_ls(ls);
-	// ft_printf("\n\n\n\n");
+	ft_debug_options(options);
+	ft_debug_ls(ls);
+	ft_printf("\n\n\n\n");
 	if (!ls->has_args)
 		ft_list_dir(".", options);
 	else

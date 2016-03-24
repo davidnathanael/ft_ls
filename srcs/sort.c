@@ -25,7 +25,7 @@ t_ent		*ft_set_content(char* dir_name, t_dirent *entry)
 	return (content);
 }
 
-static t_list		*ft_push(t_list *list, t_opt *options, char *dir_name, t_dirent *entry)
+static t_list		*ft_insert_to_list(t_list *list, t_opt *options, char *dir_name, t_dirent *entry)
 {
 	t_ent		*content;
 	t_list		*new;
@@ -43,14 +43,14 @@ static t_list		*ft_push(t_list *list, t_opt *options, char *dir_name, t_dirent *
 		list = new;
 	else if (!tmp->next)
 	{
-		is_well_placed = ft_sort_util_alpha(content->name, tmp_content->name);
+		is_well_placed = ft_sort_util_alpharev(content->name, tmp_content->name);
 		list = (is_well_placed) ? new : list;
 		new->next = (is_well_placed) ? tmp : new->next;
 		tmp->next = (is_well_placed) ? tmp->next : new;
 	}
 	else
 	{
-		if (ft_sort_util_alpha(content->name, tmp_content->name))
+		if (ft_sort_util_alpharev(content->name, tmp_content->name))
 		{
 			new->next = list;
 			list = new;
@@ -58,13 +58,13 @@ static t_list		*ft_push(t_list *list, t_opt *options, char *dir_name, t_dirent *
 		}
 		while (tmp)
 		{
-			tmp_content = tmp->content;
 			if (!tmp->next)
 			{
 				tmp->next = new;	
 				break;
 			}
-			else if (ft_sort_util_alpha(content->name, tmp_content->name))
+			tmp_content = tmp->next->content;
+			if (ft_sort_util_alpharev(content->name, tmp_content->name))
 			{
 				new->next = tmp->next;
 				tmp->next = new;
@@ -91,7 +91,7 @@ t_list		*ft_get_sorted_list(char *dir_name, t_opt *options)
 	{
 		if (entry->d_name[0] == '.' && options->a == FALSE)
 			continue;
-		list = ft_push(list, options, dir_name, entry);
+		list = ft_insert_to_list(list, options, dir_name, entry);
 	}
 	ft_closedir(dir, dir_name);
 	return (list);
