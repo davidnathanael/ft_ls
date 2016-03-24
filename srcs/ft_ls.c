@@ -13,7 +13,7 @@
 #include "ft_ls.h"
 #include <limits.h>
 
-void		ft_proceed_r_upper(char *dir_name, char *d_name, t_opt *options);
+void		ft_proceed_r_upper(char *dir_name, t_opt *options, t_list *list, t_ent *ent);
 
 
 t_bool			ft_is_dot(const char *d_name)
@@ -49,31 +49,32 @@ static void		ft_list_dir(char *dir_name, t_opt *options)
 		printf("%s\n", ent->name);
 		tmp = tmp->next;
 	}
+	if (options->r_upper)
+		ft_proceed_r_upper(dir_name, options, list, list->content);
+}
+
+void		ft_proceed_r_upper(char *dir_name, t_opt *options, t_list *list, t_ent *ent)
+{
+	int			path_length;
+	char		path[PATH_MAX];
+	t_list		*tmp;
+
 	tmp = list;
 	while (tmp)
 	{
 		ent = tmp->content;
-		if (ent->isdir && options->r_upper)
-			ft_proceed_r_upper(dir_name, ent->name, options);
-		tmp = tmp->next;
-	}
-}
-
-void		ft_proceed_r_upper(char *dir_name, char *d_name, t_opt *options)
-{
-	int path_length;
-	char path[PATH_MAX];
-
-	if (!ft_is_dot(d_name))
-	{
-		ft_printf("\n%s/%s:\n", dir_name, d_name);
-		path_length = snprintf (path, PATH_MAX,
-			"%s/%s", dir_name, d_name);
-		if (path_length >= PATH_MAX) {
-			fprintf (stderr, "Path length has got too long.\n");
-			exit (EXIT_FAILURE);
+		if (!ft_is_dot(ent->name) && ent->isdir)
+		{
+			ft_printf("\n%s/%s:\n", dir_name, ent->name);
+			path_length = snprintf (path, PATH_MAX,
+				"%s/%s", dir_name, ent->name);
+			if (path_length >= PATH_MAX) {
+				fprintf (stderr, "Path length has got too long.\n");
+				exit (EXIT_FAILURE);
+			}
+			ft_list_dir (path, options);
 		}
-		ft_list_dir (path, options);
+		tmp = tmp->next;
 	}
 }
 
@@ -84,9 +85,9 @@ void			ft_ls(int ac, char **av)
 
 	options = ft_get_ls_options(av);
 	ls = ft_get_ls_args(ac, av, options);
-	ft_debug_options(options);
-	ft_debug_ls(ls);
-	ft_printf("\n\n\n\n");
+	// ft_debug_options(options);
+	// ft_debug_ls(ls);
+	// ft_printf("\n\n\n\n");
 	if (!ls->has_args)
 		ft_list_dir(".", options);
 	else

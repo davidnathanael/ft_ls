@@ -25,54 +25,66 @@ t_ent		*ft_set_content(char* dir_name, t_dirent *entry)
 	return (content);
 }
 
-static t_list		*ft_insert_to_list(t_list *list, t_opt *options, char *dir_name, t_dirent *entry)
+t_bool (* ft_get_cmp_func(t_opt *options))(char *,char *)
 {
-	t_ent		*content;
-	t_list		*new;
+	if (options->r)
+		return (ft_sort_util_alpharev);
+	return (ft_sort_util_alpha);
+}
+
+t_list				*ft_push(t_list *list, t_list *new, t_ent *content,
+							t_bool (*cmp_func)(char *, char *))
+{
 	t_list		*tmp;
 	t_ent		*tmp_content;
-	t_bool		is_well_placed;	
 
-	content = ft_set_content(dir_name, entry);
-	new = ft_lstnew(content, sizeof(*content));
 	tmp = list;
-	tmp_content = (list) ? list->content : NULL;
-	is_well_placed = FALSE;
-	(void)options;
-	if (!list)
-		list = new;
-	else if (!tmp->next)
+	tmp_content = list->content;
+	if ((*cmp_func)(content->name, tmp_content->name))
 	{
-		is_well_placed = ft_sort_util_alpharev(content->name, tmp_content->name);
-		list = (is_well_placed) ? new : list;
-		new->next = (is_well_placed) ? tmp : new->next;
-		tmp->next = (is_well_placed) ? tmp->next : new;
+		new->next = list;
+		list = new;
 	}
 	else
 	{
-		if (ft_sort_util_alpharev(content->name, tmp_content->name))
-		{
-			new->next = list;
-			list = new;
-			return (list);
-		}
-		while (tmp)
-		{
-			if (!tmp->next)
-			{
-				tmp->next = new;	
-				break;
-			}
-			tmp_content = tmp->next->content;
-			if (ft_sort_util_alpharev(content->name, tmp_content->name))
-			{
-				new->next = tmp->next;
-				tmp->next = new;
-				break;
-			}
+		while (tmp->next && (tmp_content = tmp->next->content)
+					&& (*cmp_func)(content->name, tmp_content->name) == FALSE)
 			tmp = tmp->next;	
+		if (!tmp->next)
+			tmp->next = new;	
+		else
+		{
+			new->next = tmp->next;
+			tmp->next = new;
 		}
 	}
+	return (list);
+}
+
+static t_list		*ft_insert_to_list(t_list *list, t_opt *options,
+										char *dir_name, t_dirent *entry)
+{
+	t_ent		*content;
+	t_ent		*tmp_content;
+	t_list		*new;
+	t_bool 		(*cmp_func)(char *, char *);
+	t_bool		is_well_placed;	
+
+	content = ft_set_content(dir_name, entry);
+	tmp_content = (list) ? list->content : NULL;
+	new = ft_lstnew(content, sizeof(*content));
+	cmp_func = ft_get_cmp_func(options); 
+	is_well_placed = (list) ? cmp_func(content->name, tmp_content->name) :FALSE;
+	if (!list)
+		list = new;
+	else if (!list->next)
+	{
+		new->next = (is_well_placed) ? list : new->next;
+		list = (is_well_placed) ? new : list;
+		list->next = (is_well_placed) ? list->next : new;
+	}
+	else
+		list = ft_push(list, new, content, cmp_func);
 	free(content);
 	return (list);
 }
