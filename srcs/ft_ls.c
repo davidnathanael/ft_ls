@@ -43,10 +43,9 @@ static void		ft_list_dir(char *dir_name, t_opt *options)
 	list = ft_get_sorted_list(dir_name, options);
 	// ft_debug_list(list);
 	tmp = list;
-	while (tmp)
+	while (tmp && (ent = tmp->content))
 	{
-		ent = tmp->content;
-		printf("%s\n", ent->name);
+		printf("%s\n", ent->name); //printing part.
 		tmp = tmp->next;
 	}
 	if (options->r_upper)
