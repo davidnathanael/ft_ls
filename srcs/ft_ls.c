@@ -13,7 +13,7 @@
 #include "ft_ls.h"
 #include <limits.h>
 
-void		ft_proceed_r_upper(char *dir_name, t_opt *options, t_list *list, t_ent *ent);
+void		ft_proceed_r_upper(char *dir_name, t_ls_infos *infos, t_list *list, t_ent *ent);
 
 
 t_bool			ft_is_dot(const char *d_name)
@@ -34,25 +34,19 @@ char			*ft_get_full_path(const char *dir_name, const char *d_name)
 	return (ret);
 }
 
-static void		ft_list_dir(char *dir_name, t_opt *options)		
+static void		ft_list_dir(char *dir_name, t_ls_infos *infos)		
 {
 	t_list		*list;
-	t_list		*tmp;
-	t_ent		*ent;
 
-	list = ft_get_sorted_list(dir_name, options);
+	list = ft_get_sorted_list(dir_name, infos);
 	// ft_debug_list(list);
-	tmp = list;
-	while (tmp && (ent = tmp->content))
-	{
-		ft_proceed_printing(tmp->content, options);
-		tmp = tmp->next;
-	}
-	if (options->r_upper)
-		ft_proceed_r_upper(dir_name, options, list, list->content);
+	// ft_debug_widths(infos->widths);
+	ft_proceed_printing(list, infos);
+	if (infos->options->r_upper && list)
+		ft_proceed_r_upper(dir_name, infos, list, list->content);
 }
 
-void		ft_proceed_r_upper(char *dir_name, t_opt *options, t_list *list, t_ent *ent)
+void		ft_proceed_r_upper(char *dir_name, t_ls_infos *infos, t_list *list, t_ent *ent)
 {
 	int			path_length;
 	char		path[PATH_MAX];
@@ -71,7 +65,7 @@ void		ft_proceed_r_upper(char *dir_name, t_opt *options, t_list *list, t_ent *en
 				fprintf (stderr, "Path length has got too long.\n");
 				exit (EXIT_FAILURE);
 			}
-			ft_list_dir (path, options);
+			ft_list_dir (path, infos);
 		}
 		tmp = tmp->next;
 	}
@@ -79,19 +73,23 @@ void		ft_proceed_r_upper(char *dir_name, t_opt *options, t_list *list, t_ent *en
 
 void			ft_ls(int ac, char **av)
 {
-	t_opt	*options;
-	t_ls	*ls;
+	t_ls_infos	*infos;
 
-	options = ft_get_ls_options(av);
-	ls = ft_get_ls_args(ac, av, options);
-	// ft_debug_options(options);
-	// ft_debug_ls(ls);
+	(void)ac;
+	infos = (t_ls_infos *)malloc(sizeof(*infos));
+	if (!infos)
+		return ;
+	infos->options = ft_get_ls_options(av);
+	infos->ls = ft_get_ls_args(av, infos->options);
+	infos->widths = ft_init_ls_widths();
+	// ft_debug_options(infos->options);
+	// ft_debug_ls(infos->ls);
 	// ft_printf("\n\n\n\n");
-	if (!ls->has_args)
-		ft_list_dir(".", options);
+	if (!infos->ls->has_args)
+		ft_list_dir(".", infos);
 	else
 	{
-		while (*ls->args)
-			ft_list_dir(*ls->args++, options);
+		while (*infos->ls->args)
+			ft_list_dir(*infos->ls->args++, infos);
 	}
 }

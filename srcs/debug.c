@@ -70,3 +70,12 @@ void ft_debug_list(t_list *list)
 		tmp = tmp->next;
 	}
 }
+
+void ft_debug_widths(t_widths *widths)
+{
+	ft_printf("{red}------WIDTHS------{eoc}\n\n");
+	ft_printf("nb_links_width -> {green}%d{eoc}\n", widths->nb_links);
+	ft_printf("user -> {green}%d{eoc}\n", widths->user);
+	ft_printf("group-> {green}%d{eoc}\n", widths->group);
+	ft_printf("{red}------------------{eoc}\n\n");
+}

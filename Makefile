@@ -39,7 +39,8 @@ SRCBASE		=	\
 				options.c													\
 				print.c														\
 				sort.c														\
-				sort_utils.c
+				sort_utils.c												\
+				widths.c
 
 INCBASE		=	\
 				ft_ls.h														\

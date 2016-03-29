@@ -12,7 +12,7 @@
 
 #include "ft_ls.h"
 
-t_ent		*ft_set_content(char* dir_name, t_dirent *entry)
+t_ent		*ft_set_content(char* dir_name, t_dirent *entry, t_ls_infos *infos)
 {
 	t_ent	*content;
 
@@ -22,6 +22,7 @@ t_ent		*ft_set_content(char* dir_name, t_dirent *entry)
 	content->name = ft_strdup(entry->d_name);
 	content->filepath = ft_get_full_path(dir_name, content->name);
 	content->isdir = ft_is_dir(content->filepath);
+	ft_update_widths(content, infos->widths);
 	return (content);
 }
 
@@ -61,7 +62,7 @@ t_list				*ft_push(t_list *list, t_list *new, t_ent *content,
 	return (list);
 }
 
-static t_list		*ft_insert_to_list(t_list *list, t_opt *options,
+static t_list		*ft_insert_to_list(t_list *list, t_ls_infos *infos,
 										char *dir_name, t_dirent *entry)
 {
 	t_ent		*content;
@@ -70,10 +71,10 @@ static t_list		*ft_insert_to_list(t_list *list, t_opt *options,
 	t_bool 		(*cmp_func)(char *, char *);
 	t_bool		is_well_placed;	
 
-	content = ft_set_content(dir_name, entry);
+	content = ft_set_content(dir_name, entry, infos);
 	tmp_content = (list) ? list->content : NULL;
 	new = ft_lstnew(content, sizeof(*content));
-	cmp_func = ft_get_cmp_func(options); 
+	cmp_func = ft_get_cmp_func(infos->options); 
 	is_well_placed = (list) ? cmp_func(content->name, tmp_content->name) :FALSE;
 	if (!list)
 		list = new;
@@ -89,7 +90,7 @@ static t_list		*ft_insert_to_list(t_list *list, t_opt *options,
 	return (list);
 }
 
-t_list		*ft_get_sorted_list(char *dir_name, t_opt *options)
+t_list		*ft_get_sorted_list(char *dir_name, t_ls_infos *infos)
 {
 	t_list		*list;
 	DIR			*dir;
@@ -99,7 +100,7 @@ t_list		*ft_get_sorted_list(char *dir_name, t_opt *options)
 	list = NULL;
 	dir = ft_opendir(dir_name);
 	while ((entry = readdir (dir)) != NULL)
-		list = ft_insert_to_list(list, options, dir_name, entry);
+		list = ft_insert_to_list(list, infos, dir_name, entry);
 	ft_closedir(dir, dir_name);
 	return (list);
 }

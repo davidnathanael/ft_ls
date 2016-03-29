@@ -6,7 +6,7 @@
 /*   By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 11:28:54 by ddela-cr          #+#    #+#             */
-/*   Updated: 2016/01/27 14:41:02 by ddela-cr         ###   ########.fr       */
+/*   Updated: 2016/03/29 16:23:52 by ddela-cr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ size_t			ft_putstr(char const *s);
 int				ft_putwstr(wchar_t *str);
 void			ft_putendl(char const *s);
 void			ft_putnbr(int n);
+unsigned int	ft_nbrlen(long long n);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char const *s, int fd);
 void			ft_putendl_fd(char const *s, int fd);

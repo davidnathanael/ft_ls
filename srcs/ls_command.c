@@ -12,17 +12,7 @@
 
 #include "ft_ls.h"
 
-void			ft_free_ls_args(t_ls *ls)
-{
-	unsigned int	nb_args;
-
-	nb_args = ls->nb_args;
-	while (--nb_args <= 0)
-		free(ls->args[nb_args]);
-	free(ls);
-}
-
-static t_bool	ft_has_ls_args(t_ls *ls, char **av)
+static t_bool	ft_has_ls_args(t_ls *ls, char **av, unsigned int *index)
 {
 	unsigned int		i;
 	size_t				len;
@@ -39,23 +29,26 @@ static t_bool	ft_has_ls_args(t_ls *ls, char **av)
 		if (no_more_options)
 			ls->nb_args++;
 	}
+	*index = i - ls->nb_args;
 	return ((ls->nb_args > 0) ? TRUE : FALSE);
 }
 
-static t_ls		*ft_set_ls_args(int ac, char **av, t_ls *ls)
+static t_ls		*ft_set_ls_args(char **av, t_ls *ls)
 {
 	unsigned int		i;
+	unsigned int		last_option_index;
+	unsigned int		*last_option_index_ptr;
 
 	i = 0;
-	(void)ac;
-	ls->has_args = ft_has_ls_args(ls, av);
+	last_option_index = 0;
+	last_option_index_ptr = &last_option_index;
+	ls->has_args = ft_has_ls_args(ls, av, last_option_index_ptr);
 	ls->args = (char **)malloc(sizeof(char *) * ls->nb_args + 1);
 	if (!ls->args)
 		return (NULL);
-	i = 0;
 	while (i < ls->nb_args)
 	{
-		ls->args[i] = ft_strdup(av[1 + ls->has_options + i]);
+		ls->args[i] = ft_strdup(av[last_option_index + i]);
 		i++;
 	}
 	ls->args[i] = NULL;
@@ -76,11 +69,11 @@ static t_ls		*ft_init_ls_args(t_opt *options)
 	return (ls);
 }
 
-t_ls			*ft_get_ls_args(int ac, char **av, t_opt *options)
+t_ls			*ft_get_ls_args(char **av, t_opt *options)
 {
 	t_ls	*ls;
 
 	ls = ft_init_ls_args(options);
-	ls = ft_set_ls_args(ac, av, ls);
+	ls = ft_set_ls_args(av, ls);
 	return (ls);
 }
