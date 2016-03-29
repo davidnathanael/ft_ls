@@ -12,6 +12,12 @@
 
 #include "ft_ls.h"
 
+static void     ft_print_time(t_stat fileStat, t_ls_infos *infos)
+{
+    (void)infos;
+    ft_printf(" %s", ft_strsub(ctime(&fileStat.st_mtime), 4, 12));
+}
+
 static void     ft_print_user_group(t_stat fileStat, t_ls_infos *infos)
 {
     char    *user;
@@ -50,7 +56,8 @@ static void		ft_proceed_long_display(t_ent *ent, t_ls_infos *infos)
     }
     ft_print_permissions_links(fileStat, infos);
     ft_print_user_group(fileStat, infos);
-    ft_printf(" xxx xxx %s\n", ent->name);
+    ft_print_time(fileStat, infos);
+    ft_printf(" %s\n", ent->name);
 }
 
 void            ft_proceed_printing(t_list *list, t_ls_infos *infos)
