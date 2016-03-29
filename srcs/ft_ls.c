@@ -45,7 +45,7 @@ static void		ft_list_dir(char *dir_name, t_opt *options)
 	tmp = list;
 	while (tmp && (ent = tmp->content))
 	{
-		printf("%s\n", ent->name); //printing part.
+		ft_proceed_printing(tmp->content, options);
 		tmp = tmp->next;
 	}
 	if (options->r_upper)
@@ -64,7 +64,7 @@ void		ft_proceed_r_upper(char *dir_name, t_opt *options, t_list *list, t_ent *en
 		ent = tmp->content;
 		if (!ft_is_dot(ent->name) && ent->isdir)
 		{
-			ft_printf("\n%s/%s:\n", dir_name, ent->name);
+			ft_printf("\n%s:\n", ent->filepath);
 			path_length = snprintf (path, PATH_MAX,
 				"%s/%s", dir_name, ent->name);
 			if (path_length >= PATH_MAX) {

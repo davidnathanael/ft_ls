@@ -30,6 +30,9 @@ typedef unsigned char	t_bool;
 typedef struct dirent	t_dirent;
 typedef struct stat		t_stat;
 
+
+
+
 typedef struct			s_opt
 {
 	t_bool				has_options;
@@ -51,6 +54,7 @@ typedef struct			s_ls
 
 typedef struct 			s_ent
 {
+	t_dirent			*ent;
 	char				*name;
 	char				*filepath;
 	t_bool				isdir;
@@ -70,6 +74,8 @@ void					ft_free_args(t_ls *ls);
 t_list					*ft_get_sorted_list(char *dir_name, t_opt *options);
 t_bool					ft_sort_util_alpha(char *elem1, char *elem2);
 t_bool					ft_sort_util_alpharev(char *elem1, char *elem2);
+
+void					ft_proceed_printing(t_ent *ent, t_opt *options);
 
 void					ft_debug_options(t_opt *options);
 void					ft_debug_ls(t_ls *ls);

@@ -96,15 +96,10 @@ t_list		*ft_get_sorted_list(char *dir_name, t_opt *options)
 	t_dirent	*entry ;
 	
 
-	(void)options;
 	list = NULL;
 	dir = ft_opendir(dir_name);
 	while ((entry = readdir (dir)) != NULL)
-	{
-		if (entry->d_name[0] == '.' && options->a == FALSE)
-			continue;
 		list = ft_insert_to_list(list, options, dir_name, entry);
-	}
 	ft_closedir(dir, dir_name);
 	return (list);
 }

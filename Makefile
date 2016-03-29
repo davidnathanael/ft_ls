@@ -37,6 +37,7 @@ SRCBASE		=	\
 				ls_command.c												\
 				main.c														\
 				options.c													\
+				print.c														\
 				sort.c														\
 				sort_utils.c
 
