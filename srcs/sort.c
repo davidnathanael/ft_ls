@@ -99,6 +99,8 @@ t_list		*ft_get_sorted_list(char *dir_name, t_ls_infos *infos)
 
 	list = NULL;
 	dir = ft_opendir(dir_name);
+	if (!dir)
+		return (NULL);
 	while ((entry = readdir (dir)) != NULL)
 		list = ft_insert_to_list(list, infos, dir_name, entry);
 	ft_closedir(dir, dir_name);

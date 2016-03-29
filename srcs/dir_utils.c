@@ -21,7 +21,6 @@ DIR				*ft_opendir(char *dir_name)
 	{
 		fprintf (stderr, "Cannot open directory '%s': %s\n",
 			dir_name, strerror (errno));
-		exit (EXIT_FAILURE);
 	}
 	return (dir);
 }
