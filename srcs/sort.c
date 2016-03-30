@@ -12,16 +12,17 @@
 
 #include "ft_ls.h"
 
-t_ent		*ft_set_content(char* dir_name, t_dirent *entry, t_ls_infos *infos)
+static t_ent	*ft_set_content(char* dir_name, t_dirent *entry, t_ls_infos *infos)
 {
 	t_ent	*content;
 
 	content = (t_ent *)malloc(sizeof(t_ent));
 	if (!content)
 		return (NULL);
-	content->name = ft_strdup(entry->d_name);
+	content->name = entry->d_name;
 	content->filepath = ft_get_full_path(dir_name, content->name);
-	content->isdir = ft_is_dir(content->filepath);
+	content->is_dir = ft_is_dir(content->filepath);
+	content->is_ent = (content->is_dir) ? TRUE : ft_is_ent(dir_name);
 	content->mtime = ft_get_mtime(content->filepath);
 	infos->total += ft_get_blocks(content, infos);
 	ft_update_widths(content, infos->widths);

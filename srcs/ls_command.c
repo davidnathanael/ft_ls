@@ -53,7 +53,7 @@ static t_ls		*ft_set_ls_args(char **av, t_ls *ls, t_opt *options)
 							ls->sorted_args, options);
 		i++;
 	}
-	ft_debug_list_args(ls->sorted_args);
+	// ft_debug_list_args(ls->sorted_args);
 	ls->args[i] = NULL;
 	return (ls);
 }

@@ -55,7 +55,7 @@ typedef struct			s_opt
 	t_bool				has_options;
 	t_bool				l;
 	t_bool				r_upper;
-	t_bool				 a;
+	t_bool				a;
 	t_bool				r;
 	t_bool				t;
 	t_bool				one;
@@ -84,7 +84,8 @@ typedef struct 			s_ent
 	char				*name;
 	char				*filepath;
 	long				mtime;
-	t_bool				isdir;
+	t_bool				is_ent;
+	t_bool				is_dir;
 }						t_ent;
 
 void					ft_ls(int ac, char **av);

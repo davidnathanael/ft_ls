@@ -56,7 +56,7 @@ void		ft_proceed_r_upper(char *dir_name, t_ls_infos *infos, t_list *list, t_ent 
 	while (tmp)
 	{
 		ent = tmp->content;
-		if (!ft_is_dot(ent->name) && ent->isdir)
+		if (!ft_is_dot(ent->name) && ent->is_dir)
 		{
 			ft_printf("\n%s:\n", ent->filepath);
 			path_length = snprintf (path, PATH_MAX,

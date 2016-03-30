@@ -66,7 +66,7 @@ void ft_debug_list(t_list *list)
 		content = tmp->content;
 		ft_printf("name : %s\n", content->name);
 		ft_printf("filepath : %s\n", content->filepath);
-		ft_printf("isdir : %s\n\n", (content->isdir) ? "TRUE" : "FALSE");
+		ft_printf("isdir : %s\n\n", (content->is_dir) ? "TRUE" : "FALSE");
 		tmp = tmp->next;
 	}
 }
