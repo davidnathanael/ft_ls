@@ -62,20 +62,21 @@ static void     ft_print_permissions(t_stat fileStat)
     ft_putchar((fileStat.st_mode & S_IXOTH) ? 'x' : '-');
 }
 
-static void     ft_proceed_long_display(t_ent *ent, t_ls_infos *infos)
+static void     ft_proceed_long_display(char *name, char *filepath,
+                                        t_ls_infos *infos)
 {
     t_stat fileStat;
 
-    if(stat(ent->filepath,&fileStat) < 0)    
+    if(stat(filepath,&fileStat) < 0)    
     {
-        ft_printf("stat() failed : stat(%s)\n", ent->filepath);
+        ft_printf("stat() failed : stat(%s)\n", filepath);
         return ;
     }
     ft_print_permissions(fileStat);
-    ft_print_xattr_nb_links(ent->filepath, fileStat, infos);
+    ft_print_xattr_nb_links(filepath, fileStat, infos);
     ft_print_user_group(fileStat, infos);
     ft_print_time(fileStat, infos);
-    ft_printf(" %s\n", ent->name);
+    ft_printf(" %s\n", name);
 }
 
 void            ft_proceed_printing(t_list *list, t_ls_infos *infos)
@@ -89,7 +90,7 @@ void            ft_proceed_printing(t_list *list, t_ls_infos *infos)
     while (tmp && (ent = tmp->content))
     {
         if (infos->options->l)
-            ft_proceed_long_display(ent, infos);
+            ft_proceed_long_display(ent->name, ent->filepath, infos);
         else
           ft_printf("%s\n", ent->name);
       tmp = tmp->next;

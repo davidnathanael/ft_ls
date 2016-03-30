@@ -6,7 +6,7 @@
 #    By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/14 12:04:07 by ddela-cr          #+#    #+#              #
-#    Updated: 2016/03/30 11:39:04 by ddela-cr         ###   ########.fr        #
+#    Updated: 2016/03/30 18:26:41 by ddela-cr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,9 @@ SRCBASE		=	\
 				options.c													\
 				print.c														\
 				sort.c														\
+				sort_args.c													\
 				sort_utils.c												\
+				time.c														\
 				total.c														\
 				widths.c
 

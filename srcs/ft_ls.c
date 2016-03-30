@@ -88,6 +88,11 @@ void			ft_ls(int ac, char **av)
 	else
 	{
 		while (*infos->ls->args)
-			ft_list_dir(*infos->ls->args++, infos);
+		{
+			if (ft_is_dir(*infos->ls->args))
+				ft_list_dir(*infos->ls->args++, infos);
+			else
+				ft_printf("%s\n", *infos->ls->args++);
+		}
 	}
 }

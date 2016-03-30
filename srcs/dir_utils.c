@@ -36,8 +36,18 @@ void			ft_closedir(DIR *dir, const char *dir_name)
 
 t_bool			ft_is_dir(const char *path)
 {
-	t_stat		statbuf;
-	if (stat(path, &statbuf) != 0)
+	t_stat		fileStat;
+	
+	if (stat(path, &fileStat) != 0)
 		return (0);
-	return S_ISDIR(statbuf.st_mode);
+	return S_ISDIR(fileStat.st_mode);
+}
+
+t_bool			ft_is_ent(const char *path)
+{
+	t_stat		fileStat;
+
+	if (stat(path, &fileStat) != 0)
+		return (FALSE);
+	return (TRUE);
 }

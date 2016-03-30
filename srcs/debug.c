@@ -71,6 +71,20 @@ void ft_debug_list(t_list *list)
 	}
 }
 
+void ft_debug_list_args(t_list *list)
+{
+	t_list	*tmp;
+
+	tmp = list;
+	ft_printf("{red}------LIST ARGS------{eoc}\n");
+	while (tmp)
+	{
+		ft_printf("arg : %s\n", tmp->content);
+		tmp = tmp->next;
+	}
+	ft_printf("{red}---------------------{eoc}\n");
+}
+
 void ft_debug_widths(t_widths *widths)
 {
 	ft_printf("{red}------WIDTHS------{eoc}\n\n");

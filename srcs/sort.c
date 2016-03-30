@@ -22,27 +22,29 @@ t_ent		*ft_set_content(char* dir_name, t_dirent *entry, t_ls_infos *infos)
 	content->name = ft_strdup(entry->d_name);
 	content->filepath = ft_get_full_path(dir_name, content->name);
 	content->isdir = ft_is_dir(content->filepath);
+	content->mtime = ft_get_mtime(content->filepath);
 	infos->total += ft_get_blocks(content, infos);
 	ft_update_widths(content, infos->widths);
 	return (content);
 }
 
-t_bool (* ft_get_cmp_func(t_opt *options))(char *,char *)
+t_bool 		(* ft_get_cmp_func(t_opt *options))(t_ent *ent1, t_ent *ent2)
 {
-	if (options->r)
-		return (ft_sort_util_alpharev);
-	return (ft_sort_util_alpha);
+	if (options->t)
+		return ((options->r) ? ft_sort_util_chronorev : ft_sort_util_chrono);
+	else
+		return ((options->r) ? ft_sort_util_alpharev : ft_sort_util_alpha);
 }
 
-t_list				*ft_push(t_list *list, t_list *new, t_ent *content,
-							t_bool (*cmp_func)(char *, char *))
+t_list		*ft_push(t_list *list, t_list *new, t_ent *content,
+							t_bool (*cmp_func)(t_ent *ent1, t_ent *ent2))
 {
 	t_list		*tmp;
 	t_ent		*tmp_content;
 
 	tmp = list;
 	tmp_content = list->content;
-	if ((*cmp_func)(content->name, tmp_content->name))
+	if ((*cmp_func)(content, tmp_content))
 	{
 		new->next = list;
 		list = new;
@@ -50,7 +52,7 @@ t_list				*ft_push(t_list *list, t_list *new, t_ent *content,
 	else
 	{
 		while (tmp->next && (tmp_content = tmp->next->content)
-					&& (*cmp_func)(content->name, tmp_content->name) == FALSE)
+				&& (*cmp_func)(content, tmp_content) == FALSE)
 			tmp = tmp->next;	
 		if (!tmp->next)
 			tmp->next = new;	
@@ -69,14 +71,14 @@ static t_list		*ft_insert_to_list(t_list *list, t_ls_infos *infos,
 	t_ent		*content;
 	t_ent		*tmp_content;
 	t_list		*new;
-	t_bool 		(*cmp_func)(char *, char *);
+	t_bool 		(*cmp_func)(t_ent *ent1, t_ent *ent2);
 	t_bool		is_well_placed;	
 
 	content = ft_set_content(dir_name, entry, infos);
 	tmp_content = (list) ? list->content : NULL;
 	new = ft_lstnew(content, sizeof(*content));
 	cmp_func = ft_get_cmp_func(infos->options); 
-	is_well_placed = (list) ? cmp_func(content->name, tmp_content->name) :FALSE;
+	is_well_placed = (list) ? cmp_func(content, tmp_content) : FALSE;
 	if (!list)
 		list = new;
 	else if (!list->next)

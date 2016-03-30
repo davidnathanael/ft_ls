@@ -67,6 +67,7 @@ typedef struct			s_ls
 	t_bool				has_args;
 	unsigned int		nb_args;
 	char				**args;
+	t_list				*sorted_args;
 }						t_ls;
 
 typedef struct 			s_ls_infos
@@ -82,6 +83,7 @@ typedef struct 			s_ent
 	t_dirent			*ent;
 	char				*name;
 	char				*filepath;
+	long				mtime;
 	t_bool				isdir;
 }						t_ent;
 
@@ -90,19 +92,25 @@ void					ft_ls(int ac, char **av);
 DIR						*ft_opendir(char *dir_name);
 void					ft_closedir(DIR *dir, const char *dir_name);
 t_bool					ft_is_dir(const char *path);
+t_bool					ft_is_ent(const char *path);
 char					*ft_get_full_path(const char *dir_name, const char *d_name);
 
 t_opt					*ft_get_ls_options(char **av);
 t_ls					*ft_get_ls_args(char **av, t_opt *options);
+t_list					*ft_get_sorted_args(char *path, t_list *list, t_opt *options);
 
 t_widths				*ft_init_ls_widths();
 void					ft_update_widths(t_ent* ent, t_widths *widths);
 
 unsigned int			ft_get_blocks(t_ent *ent, t_ls_infos *infos);
+long					ft_get_mtime(char *filepath);
 
 t_list					*ft_get_sorted_list(char *dir_name, t_ls_infos *infos);
-t_bool					ft_sort_util_alpha(char *elem1, char *elem2);
-t_bool					ft_sort_util_alpharev(char *elem1, char *elem2);
+t_bool 					(* ft_get_cmp_func(t_opt *options))(t_ent *ent1, t_ent *ent2);
+t_bool					ft_sort_util_alpha(t_ent *ent1, t_ent *ent2);
+t_bool					ft_sort_util_alpharev(t_ent *ent1, t_ent *ent2);
+t_bool					ft_sort_util_chrono(t_ent *ent1, t_ent *ent2);
+t_bool					ft_sort_util_chronorev(t_ent *ent1, t_ent *ent2);
 
 void            		ft_proceed_printing(t_list *list, t_ls_infos *infos);
 
@@ -110,6 +118,7 @@ void					ft_debug_options(t_opt *options);
 void					ft_debug_ls(t_ls *ls);
 void					ft_debug_list_dir(char *name);
 void 					ft_debug_list(t_list *list);
+void 					ft_debug_list_args(t_list *list);
 void					ft_debug_widths(t_widths *widths);
 
 #endif
