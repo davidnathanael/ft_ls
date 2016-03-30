@@ -22,6 +22,7 @@ t_ent		*ft_set_content(char* dir_name, t_dirent *entry, t_ls_infos *infos)
 	content->name = ft_strdup(entry->d_name);
 	content->filepath = ft_get_full_path(dir_name, content->name);
 	content->isdir = ft_is_dir(content->filepath);
+	infos->total += ft_get_blocks(content, infos);
 	ft_update_widths(content, infos->widths);
 	return (content);
 }
@@ -102,7 +103,11 @@ t_list		*ft_get_sorted_list(char *dir_name, t_ls_infos *infos)
 	if (!dir)
 		return (NULL);
 	while ((entry = readdir (dir)) != NULL)
+	{
+        if (infos->options->a == FALSE && entry->d_name[0] == '.')
+        	continue;
 		list = ft_insert_to_list(list, infos, dir_name, entry);
+	}
 	ft_closedir(dir, dir_name);
 	return (list);
 }

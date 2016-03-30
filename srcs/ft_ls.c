@@ -82,9 +82,7 @@ void			ft_ls(int ac, char **av)
 	infos->options = ft_get_ls_options(av);
 	infos->ls = ft_get_ls_args(av, infos->options);
 	infos->widths = ft_init_ls_widths();
-	// ft_debug_options(infos->options);
-	// ft_debug_ls(infos->ls);
-	// ft_printf("\n\n\n\n");
+	infos->total = 0;
 	if (!infos->ls->has_args)
 		ft_list_dir(".", infos);
 	else

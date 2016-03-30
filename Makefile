@@ -6,7 +6,7 @@
 #    By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/14 12:04:07 by ddela-cr          #+#    #+#              #
-#    Updated: 2016/03/22 16:07:19 by ddela-cr         ###   ########.fr        #
+#    Updated: 2016/03/30 11:39:04 by ddela-cr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRCBASE		=	\
 				print.c														\
 				sort.c														\
 				sort_utils.c												\
+				total.c														\
 				widths.c
 
 INCBASE		=	\

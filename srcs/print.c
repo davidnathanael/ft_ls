@@ -30,22 +30,39 @@ static void     ft_print_user_group(t_stat fileStat, t_ls_infos *infos)
     ft_printf("%*lld", infos->widths->size, fileStat.st_size);
 }
 
-static void		ft_print_permissions_links(t_stat fileStat, t_ls_infos *infos)
+static void    ft_print_xattr_nb_links(char *filepath, t_stat fileStat,
+                                        t_ls_infos *infos)
 {
-    ft_printf((S_ISDIR(fileStat.st_mode)) ? "d" : "-");
-    ft_printf((fileStat.st_mode & S_IRUSR) ? "r" : "-");
-    ft_printf((fileStat.st_mode & S_IWUSR) ? "w" : "-");
-    ft_printf((fileStat.st_mode & S_IXUSR) ? "x" : "-");
-    ft_printf((fileStat.st_mode & S_IRGRP) ? "r" : "-");
-    ft_printf((fileStat.st_mode & S_IWGRP) ? "w" : "-");
-    ft_printf((fileStat.st_mode & S_IXGRP) ? "x" : "-");
-    ft_printf((fileStat.st_mode & S_IROTH) ? "r" : "-");
-    ft_printf((fileStat.st_mode & S_IWOTH) ? "w" : "-");
-    ft_printf((fileStat.st_mode & S_IXOTH) ? "x" : "-");
+    int             xattr;
+    acl_t           acl;
+
+    xattr = listxattr(filepath, NULL, 0, XATTR_NOFOLLOW);
+    acl = acl_get_file(filepath, ACL_TYPE_EXTENDED);
+    if (xattr > 0)
+        ft_putchar('@');
+    else if (acl)
+        ft_putchar('+');
+    else
+        ft_putchar(' ');
+    acl_free((void *)acl);
     ft_printf("%*d",infos->widths->nb_links ,fileStat.st_nlink);
 }
 
-static void		ft_proceed_long_display(t_ent *ent, t_ls_infos *infos)
+static void     ft_print_permissions(t_stat fileStat)
+{
+    ft_putchar((S_ISDIR(fileStat.st_mode)) ? 'd' : '-');
+    ft_putchar((fileStat.st_mode & S_IRUSR) ? 'r' : '-');
+    ft_putchar((fileStat.st_mode & S_IWUSR) ? 'w' : '-');
+    ft_putchar((fileStat.st_mode & S_IXUSR) ? 'x' : '-');
+    ft_putchar((fileStat.st_mode & S_IRGRP) ? 'r' : '-');
+    ft_putchar((fileStat.st_mode & S_IWGRP) ? 'w' : '-');
+    ft_putchar((fileStat.st_mode & S_IXGRP) ? 'x' : '-');
+    ft_putchar((fileStat.st_mode & S_IROTH) ? 'r' : '-');
+    ft_putchar((fileStat.st_mode & S_IWOTH) ? 'w' : '-');
+    ft_putchar((fileStat.st_mode & S_IXOTH) ? 'x' : '-');
+}
+
+static void     ft_proceed_long_display(t_ent *ent, t_ls_infos *infos)
 {
     t_stat fileStat;
 
@@ -54,7 +71,8 @@ static void		ft_proceed_long_display(t_ent *ent, t_ls_infos *infos)
         ft_printf("stat() failed : stat(%s)\n", ent->filepath);
         return ;
     }
-    ft_print_permissions_links(fileStat, infos);
+    ft_print_permissions(fileStat);
+    ft_print_xattr_nb_links(ent->filepath, fileStat, infos);
     ft_print_user_group(fileStat, infos);
     ft_print_time(fileStat, infos);
     ft_printf(" %s\n", ent->name);
@@ -67,13 +85,13 @@ void            ft_proceed_printing(t_list *list, t_ls_infos *infos)
 
     tmp = list;
     if (infos->options->l)
-        ft_printf("total\n");
+        ft_printf("total %u\n", infos->total);
     while (tmp && (ent = tmp->content))
     {
-    	if (infos->options->l)
-    		ft_proceed_long_display(ent, infos);
-    	else
-    		ft_printf("%s\n", ent->name);
-        tmp = tmp->next;
-    }
+        if (infos->options->l)
+            ft_proceed_long_display(ent, infos);
+        else
+          ft_printf("%s\n", ent->name);
+      tmp = tmp->next;
+  }
 }

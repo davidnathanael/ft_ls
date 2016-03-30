@@ -16,8 +16,10 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <dirent.h>
-# include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/acl.h>
+# include <sys/stat.h>
+# include <sys/xattr.h>
 # include <pwd.h>
 # include <grp.h>
 # include <uuid/uuid.h>
@@ -30,7 +32,7 @@
 # define INVALID_OPTION 	-1
 # define BUFF_SIZE			1024
 
-# define NB_LINKS_MINWIDTH	2
+# define NB_LINKS_MINWIDTH	1
 # define USER_MINWIDTH		0
 # define GROUP_MINWIDTH		0
 # define SIZE_MINWIDTH		2
@@ -72,6 +74,7 @@ typedef struct 			s_ls_infos
 	t_ls				*ls;
 	t_opt				*options;
 	t_widths			*widths;
+	unsigned int		total;
 }						t_ls_infos;
 
 typedef struct 			s_ent
@@ -94,6 +97,8 @@ t_ls					*ft_get_ls_args(char **av, t_opt *options);
 
 t_widths				*ft_init_ls_widths();
 void					ft_update_widths(t_ent* ent, t_widths *widths);
+
+unsigned int			ft_get_blocks(t_ent *ent, t_ls_infos *infos);
 
 t_list					*ft_get_sorted_list(char *dir_name, t_ls_infos *infos);
 t_bool					ft_sort_util_alpha(char *elem1, char *elem2);
