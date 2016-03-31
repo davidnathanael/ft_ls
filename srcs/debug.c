@@ -6,7 +6,7 @@
 /*   By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/14 14:28:06 by ddela-cr          #+#    #+#             */
-/*   Updated: 2016/03/14 14:28:08 by ddela-cr         ###   ########.fr       */
+/*   Updated: 2016/03/31 18:54:14 by ddela-cr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	ft_debug_list_dir(char *name)
 		ft_printf("%s\n", dp->d_name);
 	(void)closedir(dirp);
 }
-
 
 void ft_debug_list(t_list *list)
 {
@@ -92,10 +91,10 @@ void ft_debug_widths(t_widths *widths)
 
 void ft_debug_arg_content(t_ent *content)
 {
-	// ft_printf("{red}------ARG------{eoc}\n");
+	ft_printf("{red}------ARG------{eoc}\n");
 	ft_printf("name : {green}%s{eoc}\n", content->name);
-	// ft_printf("path : {green}%s{eoc}\n", content->filepath);
-	// ft_printf("ent? : {green}%s{eoc}\n", (content->is_ent) ? "TRUE" : "FALSE");
-	// ft_printf("dir? : {green}%s{eoc}\n", (content->is_dir) ? "TRUE" : "FALSE");
-	// ft_printf("time : {green}%lld{eoc}\n\n", content->mtime);
+	ft_printf("path : {green}%s{eoc}\n", content->filepath);
+	ft_printf("ent? : {green}%s{eoc}\n", (content->is_ent) ? "TRUE" : "FALSE");
+	ft_printf("dir? : {green}%s{eoc}\n", (content->is_dir) ? "TRUE" : "FALSE");
+	ft_printf("time : {green}%lld{eoc}\n\n", content->mtime);
 }

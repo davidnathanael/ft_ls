@@ -15,6 +15,7 @@
 
 int		main(int ac, char **av)
 {
-	ft_ls(ac, av);
+	(void)ac;
+	ft_ls(av);
 	return (0);
 }

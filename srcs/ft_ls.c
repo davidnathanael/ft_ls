@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.c                                            :+:      :+:    :+:   */
+/*   ls.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ddela-cr <@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/17 15:15:37 by ddela-cr          #+#    #+#             */
-/*   Updated: 2016/03/17 15:15:39 by ddela-cr         ###   ########.fr       */
+/*   Created: 2016/03/31 18:57:30 by ddela-cr          #+#    #+#             */
+/*   Updated: 2016/03/31 18:59:13 by ddela-cr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-#include <limits.h>
-
-void		ft_proceed_r_upper(char *dir_name, t_ls_infos *infos, t_list *list, t_ent *ent);
-
 
 t_bool			ft_is_dot(const char *d_name)
 {
-	if (ft_strcmp (d_name, "..") != 0 && ft_strcmp (d_name, ".") != 0)
+	if (ft_strcmp(d_name, "..") != 0 && ft_strcmp(d_name, ".") != 0)
 		return (FALSE);
 	return (TRUE);
 }
@@ -34,74 +30,75 @@ char			*ft_get_full_path(const char *dir_name, const char *d_name)
 	return (ret);
 }
 
-static void		ft_list_dir(char *dir_name, t_ls_infos *infos)		
+static void		ft_list_dir(char *dir_name, t_ls_infos *infos)
 {
-	t_list		*list;
+	t_list_infos	*list_holder;
 
-	list = ft_get_sorted_list(dir_name, infos);
-	// ft_debug_list(list);
-	// ft_debug_widths(infos->widths);
-    if (infos->ls->nb_args > 1)
-        ft_printf("%s:\n", dir_name);
-    if (list)
-		ft_proceed_printing(list, infos);
-	if (infos->options->r_upper && list)
-		ft_proceed_r_upper(dir_name, infos, list, list->content);
+	list_holder = (t_list_infos *)malloc(sizeof(*list_holder));
+	list_holder->widths = ft_init_widths();
+	list_holder->total = 0;
+	list_holder->has_maj_min = FALSE;
+	list_holder->list = ft_get_sorted_list(dir_name, list_holder, infos);
+	if (infos->ls->nb_args > 1)
+		ft_printf("%s:\n", dir_name);
+	if (list_holder->list)
+		ft_proceed_printing(list_holder, infos);
+	if (infos->options->r_upper && list_holder->list)
+		ft_proceed_r_upper(dir_name, infos, list_holder,
+							list_holder->list->content);
 }
 
-void		ft_proceed_r_upper(char *dir_name, t_ls_infos *infos, t_list *list, t_ent *ent)
+void			ft_proceed_r_upper(char *dir_name, t_ls_infos *infos,
+							t_list_infos *list_holder, t_ent *ent)
 {
 	int			path_length;
 	char		path[PATH_MAX];
 	t_list		*tmp;
 
-	tmp = list;
+	tmp = list_holder->list;
 	while (tmp)
 	{
 		ent = tmp->content;
 		if (!ft_is_dot(ent->name) && ent->is_dir)
 		{
 			ft_printf("\n%s:\n", ent->filepath);
-			path_length = snprintf (path, PATH_MAX,
+			path_length = snprintf(path, PATH_MAX,
 				"%s/%s", dir_name, ent->name);
-			if (path_length >= PATH_MAX) {
-				fprintf (stderr, "Path length has got too long.\n");
-				exit (EXIT_FAILURE);
+			if (path_length >= PATH_MAX)
+			{
+				fprintf(stderr, "Path length has got too long.\n");
+				exit(EXIT_FAILURE);
 			}
-			ft_list_dir (path, infos);
+			ft_list_dir(path, infos);
 		}
 		tmp = tmp->next;
 	}
 }
 
-void			ft_ls(int ac, char **av)
+void			ft_ls(char **av)
 {
 	t_ls_infos	*infos;
+	t_ent		*content;
 
-	(void)ac;
 	infos = (t_ls_infos *)malloc(sizeof(*infos));
-	if (!infos)
-		return ;
 	infos->options = ft_get_ls_options(av);
 	infos->ls = ft_get_ls_args(av, infos->options);
-	infos->widths = ft_init_ls_widths();
-	infos->total = 0;
+	content = NULL;
 	if (!infos->ls->has_args)
 		ft_list_dir(".", infos);
 	else
 	{
-		t_list *tmp = infos->ls->sorted_args;
-		t_ent *content = infos->ls->sorted_args->content;
-		while (tmp)
+		content = infos->ls->sorted_args->content;
+		while (infos->ls->sorted_args)
 		{
-			content = tmp->content;
+			content = infos->ls->sorted_args->content;
 			if (!content->is_ent)
 				ft_printf("ls: %s: No such file or directory\n", content->name);
 			else if (!content->is_dir)
 				ft_printf("%s\n", content->name);
 			else
 				ft_list_dir(content->name, infos);
-			tmp = tmp->next;
+			infos->ls->sorted_args = infos->ls->sorted_args->next;
 		}
 	}
 }
