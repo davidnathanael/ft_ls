@@ -19,7 +19,8 @@ static t_ent	*ft_set_content(char* dir_name, t_dirent *entry, t_ls_infos *infos)
 	content = (t_ent *)malloc(sizeof(t_ent));
 	if (!content)
 		return (NULL);
-	content->name = entry->d_name;
+	content->ent = entry;
+	content->name = ft_strdup(entry->d_name);
 	content->filepath = ft_get_full_path(dir_name, content->name);
 	content->is_dir = ft_is_dir(content->filepath);
 	content->is_ent = (content->is_dir) ? TRUE : ft_is_ent(dir_name);
@@ -27,14 +28,6 @@ static t_ent	*ft_set_content(char* dir_name, t_dirent *entry, t_ls_infos *infos)
 	infos->total += ft_get_blocks(content, infos);
 	ft_update_widths(content, infos->widths);
 	return (content);
-}
-
-t_bool 		(* ft_get_cmp_func(t_opt *options))(t_ent *ent1, t_ent *ent2)
-{
-	if (options->t)
-		return ((options->r) ? ft_sort_util_chronorev : ft_sort_util_chrono);
-	else
-		return ((options->r) ? ft_sort_util_alpharev : ft_sort_util_alpha);
 }
 
 t_list		*ft_push(t_list *list, t_list *new, t_ent *content,

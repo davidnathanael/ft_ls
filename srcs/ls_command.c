@@ -43,18 +43,12 @@ static t_ls		*ft_set_ls_args(char **av, t_ls *ls, t_opt *options)
 	last_option_index = 0;
 	last_option_index_ptr = &last_option_index;
 	ls->has_args = ft_has_ls_args(ls, av, last_option_index_ptr);
-	ls->args = (char **)malloc(sizeof(char *) * ls->nb_args + 1);
-	if (!ls->args)
-		return (NULL);
 	while (i < ls->nb_args)
 	{
-		ls->args[i] = ft_strdup(av[last_option_index + i]);
 		ls->sorted_args = ft_get_sorted_args(av[last_option_index + i],
 							ls->sorted_args, options);
 		i++;
 	}
-	// ft_debug_list_args(ls->sorted_args);
-	ls->args[i] = NULL;
 	return (ls);
 }
 
@@ -68,7 +62,6 @@ static t_ls		*ft_init_ls_args(t_opt *options)
 	ls->has_options = (options->has_options) ? TRUE : FALSE;
 	ls->has_args = FALSE;
 	ls->nb_args = 0;
-	ls->args = NULL;
 	ls->sorted_args = NULL;
 	return (ls);
 }

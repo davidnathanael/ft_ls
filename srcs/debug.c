@@ -25,18 +25,11 @@ void	ft_debug_options(t_opt *options)
 
 void	ft_debug_ls(t_ls *ls)
 {
-	int		nb_args = ls->nb_args;
-	int		i = 0;
-
 	ft_printf("{red}------LS INFOS------{eoc}\n");
 	ft_printf("has_options -> {green}%d{eoc}\n", ls->has_options);
 	ft_printf("has_args -> {green}%d{eoc}\n", ls->has_args);
 	ft_printf("nb_args -> {green}%d{eoc}\n", (int)ls->nb_args);
-	while (i < nb_args)
-	{
-		ft_printf("args[%d] -> {blue}%s{eoc}\n", i, ls->args[i]);
-		i++;
-	}
+	ft_debug_list_args(ls->sorted_args);
 }
 
 void	ft_debug_list_dir(char *name)
@@ -74,12 +67,15 @@ void ft_debug_list(t_list *list)
 void ft_debug_list_args(t_list *list)
 {
 	t_list	*tmp;
+	t_ent	*tmp_ent;
 
 	tmp = list;
+	tmp_ent = tmp->content;
 	ft_printf("{red}------LIST ARGS------{eoc}\n");
 	while (tmp)
 	{
-		ft_printf("arg : %s\n", tmp->content);
+		tmp_ent = tmp->content;
+		ft_printf("arg : %s\n", tmp_ent->name);
 		tmp = tmp->next;
 	}
 	ft_printf("{red}---------------------{eoc}\n");
@@ -92,4 +88,14 @@ void ft_debug_widths(t_widths *widths)
 	ft_printf("user -> {green}%d{eoc}\n", widths->user);
 	ft_printf("group-> {green}%d{eoc}\n", widths->group);
 	ft_printf("{red}------------------{eoc}\n\n");
+}
+
+void ft_debug_arg_content(t_ent *content)
+{
+	// ft_printf("{red}------ARG------{eoc}\n");
+	ft_printf("name : {green}%s{eoc}\n", content->name);
+	// ft_printf("path : {green}%s{eoc}\n", content->filepath);
+	// ft_printf("ent? : {green}%s{eoc}\n", (content->is_ent) ? "TRUE" : "FALSE");
+	// ft_printf("dir? : {green}%s{eoc}\n", (content->is_dir) ? "TRUE" : "FALSE");
+	// ft_printf("time : {green}%lld{eoc}\n\n", content->mtime);
 }

@@ -41,7 +41,10 @@ static void		ft_list_dir(char *dir_name, t_ls_infos *infos)
 	list = ft_get_sorted_list(dir_name, infos);
 	// ft_debug_list(list);
 	// ft_debug_widths(infos->widths);
-	ft_proceed_printing(list, infos);
+    if (infos->ls->nb_args > 1)
+        ft_printf("%s:\n", dir_name);
+    if (list)
+		ft_proceed_printing(list, infos);
 	if (infos->options->r_upper && list)
 		ft_proceed_r_upper(dir_name, infos, list, list->content);
 }
@@ -87,12 +90,18 @@ void			ft_ls(int ac, char **av)
 		ft_list_dir(".", infos);
 	else
 	{
-		while (*infos->ls->args)
+		t_list *tmp = infos->ls->sorted_args;
+		t_ent *content = infos->ls->sorted_args->content;
+		while (tmp)
 		{
-			if (ft_is_dir(*infos->ls->args))
-				ft_list_dir(*infos->ls->args++, infos);
+			content = tmp->content;
+			if (!content->is_ent)
+				ft_printf("ls: %s: No such file or directory\n", content->name);
+			else if (!content->is_dir)
+				ft_printf("%s\n", content->name);
 			else
-				ft_printf("%s\n", *infos->ls->args++);
+				ft_list_dir(content->name, infos);
+			tmp = tmp->next;
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/14 13:32:02 by ddela-cr          #+#    #+#             */
-/*   Updated: 2016/03/14 13:32:04 by ddela-cr         ###   ########.fr       */
+/*   Updated: 2016/03/31 13:22:19 by ddela-cr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/acl.h>
 # include <sys/stat.h>
 # include <sys/xattr.h>
+# include <unistd.h>
 # include <pwd.h>
 # include <grp.h>
 # include <uuid/uuid.h>
@@ -34,8 +35,10 @@
 
 # define NB_LINKS_MINWIDTH	1
 # define USER_MINWIDTH		0
-# define GROUP_MINWIDTH		0
-# define SIZE_MINWIDTH		2
+# define GROUP_MINWIDTH		1
+# define SIZE_MINWIDTH		1
+# define MAJ_MINWIDTH		2
+# define MIN_MINWIDTH		1
 
 typedef unsigned char	t_bool;
 typedef struct dirent	t_dirent;
@@ -48,6 +51,8 @@ typedef struct 			s_widths
 	unsigned int		user;
 	unsigned int		group;
 	unsigned int		size;
+	unsigned int		maj;
+	unsigned int		min;
 }						t_widths;
 
 typedef struct			s_opt
@@ -66,7 +71,6 @@ typedef struct			s_ls
 	t_bool				has_options;
 	t_bool				has_args;
 	unsigned int		nb_args;
-	char				**args;
 	t_list				*sorted_args;
 }						t_ls;
 
@@ -76,6 +80,7 @@ typedef struct 			s_ls_infos
 	t_opt				*options;
 	t_widths			*widths;
 	unsigned int		total;
+	t_bool				has_maj_min;
 }						t_ls_infos;
 
 typedef struct 			s_ent
@@ -108,8 +113,10 @@ long					ft_get_mtime(char *filepath);
 
 t_list					*ft_get_sorted_list(char *dir_name, t_ls_infos *infos);
 t_bool 					(* ft_get_cmp_func(t_opt *options))(t_ent *ent1, t_ent *ent2);
+t_bool 					(* ft_get_cmp_func_arg(t_opt *options))(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_alpha(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_alpharev(t_ent *ent1, t_ent *ent2);
+t_bool					ft_sort_util_alpharev_arg(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_chrono(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_chronorev(t_ent *ent1, t_ent *ent2);
 
@@ -121,5 +128,6 @@ void					ft_debug_list_dir(char *name);
 void 					ft_debug_list(t_list *list);
 void 					ft_debug_list_args(t_list *list);
 void					ft_debug_widths(t_widths *widths);
+void 					ft_debug_arg_content(t_ent *content);
 
 #endif

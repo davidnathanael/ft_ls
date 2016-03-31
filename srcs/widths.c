@@ -29,7 +29,10 @@ void		ft_update_widths(t_ent* ent, t_widths *widths)
     	widths->group = ft_strlen(getgrgid(fileStat.st_gid)->gr_name) + GROUP_MINWIDTH;
     if (ft_nbrlen(fileStat.st_size) + SIZE_MINWIDTH > widths->size)
         widths->size = ft_nbrlen(fileStat.st_size) + SIZE_MINWIDTH;
-
+    if (ft_nbrlen(major(fileStat.st_rdev)) + MAJ_MINWIDTH > widths->maj)
+        widths->maj = ft_nbrlen(major(fileStat.st_rdev)) + MAJ_MINWIDTH;
+    if (ft_nbrlen(minor(fileStat.st_rdev)) + MIN_MINWIDTH > widths->min)
+        widths->min = ft_nbrlen(minor(fileStat.st_rdev)) + MIN_MINWIDTH;
 }
 
 t_widths	*ft_init_ls_widths(void)
@@ -43,5 +46,7 @@ t_widths	*ft_init_ls_widths(void)
 	widths->user = USER_MINWIDTH;
 	widths->group = GROUP_MINWIDTH;
     widths->size = SIZE_MINWIDTH;
+    widths->maj = MAJ_MINWIDTH;
+    widths->min = MIN_MINWIDTH;
 	return (widths);
 }
