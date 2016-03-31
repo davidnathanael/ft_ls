@@ -25,7 +25,7 @@ static t_ent	*ft_set_content(char *dir_name, t_dirent *entry,
 	content->filepath = ft_get_full_path(dir_name, content->name);
 	content->is_dir = ft_is_dir(content->filepath);
 	content->is_ent = (content->is_dir) ? TRUE : ft_is_ent(dir_name);
-	content->mtime = ft_get_mtime(content->filepath);
+	content->mtime = ft_get_time(content->filepath, MTIME);
 	list_holder->total += ft_get_blocks(content, infos);
 	ft_update_widths(content, list_holder);
 	return (content);
@@ -102,7 +102,6 @@ t_list			*ft_get_sorted_list(char *dir_name,
 		return (NULL);
 	while ((entry = readdir(dir)) != NULL)
 	{
-		ft_printf("%s\n", entry->d_name);
 		if (infos->options->a == FALSE && entry->d_name[0] == '.')
 			continue;
 		list_holder->list = ft_insert_to_list(list_holder, infos,

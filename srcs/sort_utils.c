@@ -16,6 +16,8 @@ t_bool		(*g_ft_get_cmp_func(t_opt *options))(t_ent *ent1, t_ent *ent2)
 {
 	if (options->t)
 		return ((options->r) ? ft_sort_util_chronorev : ft_sort_util_chrono);
+	else if (options->u)
+		return ((options->r) ? ft_sort_util_atimerev : ft_sort_util_atime);
 	else
 		return ((options->r) ? ft_sort_util_alpharev : ft_sort_util_alpha);
 }
@@ -56,6 +58,40 @@ t_bool		ft_sort_util_chronorev(t_ent *ent1, t_ent *ent2)
 	if (!ent2)
 		return (TRUE);
 	if (ent1->mtime < ent2->mtime)
+		return (TRUE);
+	return (FALSE);
+}
+
+t_bool		ft_sort_util_atime(t_ent *ent1, t_ent *ent2)
+{
+	t_stat	filestat1;
+	t_stat	filestat2;
+
+	if (lstat(ent1->filepath, &filestat1) < 0
+		|| lstat(ent2->filepath, &filestat2) < 0)
+		ft_printf("stat() failed if g_ft_get_cmp_func\n");
+	if (filestat1.st_atime == filestat2.st_atime)
+		return (ft_sort_util_alpharev(ent1, ent2));
+	if (!ent2)
+		return (TRUE);
+	if (filestat1.st_atime > filestat2.st_atime)
+		return (TRUE);
+	return (FALSE);
+}
+
+t_bool		ft_sort_util_atimerev(t_ent *ent1, t_ent *ent2)
+{
+	t_stat	filestat1;
+	t_stat	filestat2;
+
+	if (lstat(ent1->filepath, &filestat1) < 0
+		|| lstat(ent2->filepath, &filestat2) < 0)
+		ft_printf("stat() failed if g_ft_get_cmp_func\n");
+	if (filestat1.st_atime == filestat2.st_atime)
+		return (ft_sort_util_alpharev(ent1, ent2));
+	if (!ent2)
+		return (TRUE);
+	if (filestat1.st_atime < filestat2.st_atime)
 		return (TRUE);
 	return (FALSE);
 }

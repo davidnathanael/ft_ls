@@ -78,7 +78,7 @@ t_ent			*ft_set_arg_content(char *arg)
 	content->filepath = ft_strdup(arg);
 	content->is_ent = ft_is_ent(arg);
 	content->is_dir = ft_is_dir(arg);
-	content->mtime = (content->is_ent) ? ft_get_mtime(arg) : 0;
+	content->mtime = (content->is_ent) ? ft_get_time(arg, MTIME) : 0;
 	return (content);
 }
 

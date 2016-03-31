@@ -40,7 +40,12 @@
 # define MAJ_MINWIDTH		2
 # define MIN_MINWIDTH		1
 
+# define MTIME				0
+# define ATIME				1
+# define CTIME				2
+
 typedef unsigned char	t_bool;
+typedef unsigned char	t_time;
 typedef struct dirent	t_dirent;
 typedef struct stat		t_stat;
 
@@ -64,6 +69,7 @@ typedef struct			s_opt
 	t_bool				t;
 	t_bool				t_upper;
 	t_bool				one;
+	t_bool				u;
 }						t_opt;
 
 typedef struct			s_ls
@@ -119,7 +125,7 @@ t_widths				*ft_init_widths(void);
 void					ft_update_widths(t_ent *ent, t_list_infos *list_holder);
 
 unsigned int			ft_get_blocks(t_ent *ent, t_ls_infos *infos);
-long					ft_get_mtime(char *filepath);
+long					ft_get_time(char *filepath, t_time time);
 
 t_list					*ft_get_sorted_list(char *dir_name,
 						t_list_infos *list_holder, t_ls_infos *infos);
@@ -130,6 +136,8 @@ t_bool					ft_sort_util_alpharev(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_alpharev_arg(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_chrono(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_chronorev(t_ent *ent1, t_ent *ent2);
+t_bool					ft_sort_util_atime(t_ent *ent1, t_ent *ent2);
+t_bool					ft_sort_util_atimerev(t_ent *ent1, t_ent *ent2);
 
 void					ft_proceed_printing(t_list_infos *list_holder,
 						t_ls_infos *infos);

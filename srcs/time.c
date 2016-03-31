@@ -12,11 +12,16 @@
 
 #include "ft_ls.h"
 
-long	ft_get_mtime(char *filepath)
+long	ft_get_time(char *filepath, t_time time)
 {
 	t_stat	filestat;
 
-	if (stat(filepath, &filestat) < 0)
+	if (lstat(filepath, &filestat) < 0)
 		ft_printf("stat() failed if ft_get_mtime : stat(%s)\n", filepath);
-	return (filestat.st_mtime);
+	if (time == MTIME)
+		return (filestat.st_mtime);
+	else if (time == ATIME)
+		return (filestat.st_atime);
+	else
+		return (filestat.st_ctime);
 }

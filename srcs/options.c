@@ -26,6 +26,8 @@ static t_opt	*ft_handle_other_options(t_opt *options, char arg)
 {
 	if (arg == 'T')
 		options->t_upper = TRUE;
+	if (arg == 'u')
+		options->u = TRUE;
 	else
 		ft_handle_invalid_ls_option(arg, options);
 	return (options);
@@ -75,6 +77,7 @@ static t_opt	*ft_init_ls_options(void)
 	options->t = FALSE;
 	options->t_upper = FALSE;
 	options->one = FALSE;
+	options->u = FALSE;
 	return (options);
 }
 
