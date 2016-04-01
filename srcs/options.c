@@ -96,9 +96,7 @@ t_opt			*ft_get_ls_options(char **av)
 	{
 		len = ft_strlen(av[i]);
 		if ((av[i][1] == '-' && len == 2) || len <= 1)
-		{
 			return (options);
-		}
 		else
 			options = ft_parse_ls_options(options, av[i]);
 		i++;

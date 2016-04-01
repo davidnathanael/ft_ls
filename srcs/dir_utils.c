@@ -52,3 +52,21 @@ t_bool			ft_is_ent(const char *path)
 		return (FALSE);
 	return (TRUE);
 }
+
+t_bool			ft_is_dot(const char *d_name)
+{
+	if (ft_strcmp(d_name, "..") != 0 && ft_strcmp(d_name, ".") != 0)
+		return (FALSE);
+	return (TRUE);
+}
+
+char			*ft_get_full_path(const char *dir_name, const char *d_name)
+{
+	char		*ret;
+	char		*tmp;
+
+	tmp = ft_strjoin(dir_name, "/");
+	ret = ft_strjoin(tmp, d_name);
+	free(tmp);
+	return (ret);
+}

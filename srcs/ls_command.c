@@ -18,18 +18,21 @@ static t_bool	ft_has_ls_args(t_ls *ls, char **av, unsigned int *index)
 	size_t				len;
 	t_bool				no_more_options;
 
-	i = 0;
+	i = 1;
 	len = 0;
 	no_more_options = FALSE;
-	while (av[++i])
+	while (av[i])
 	{
 		len = ft_strlen(av[i]);
 		if (av[i][0] != '-' || len == 1 || (len == 2 && av[i][1] == '-'))
-			no_more_options = TRUE;
-		if (no_more_options)
-			ls->nb_args++;
+			break;
+		i++;
 	}
-	*index = i - ls->nb_args;
+	if (av[i] && len == 2 && av[i][1] == '-')
+		++i;
+	while (av[i++])
+		ls->nb_args++;
+	*index = --i - ls->nb_args;
 	return ((ls->nb_args > 0) ? TRUE : FALSE);
 }
 

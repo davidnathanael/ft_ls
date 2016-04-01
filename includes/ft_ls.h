@@ -113,6 +113,7 @@ DIR						*ft_opendir(char *dir_name);
 void					ft_closedir(DIR *dir, const char *dir_name);
 t_bool					ft_is_dir(const char *path);
 t_bool					ft_is_ent(const char *path);
+t_bool					ft_is_dot(const char *d_name);
 char					*ft_get_full_path(const char *dir_name,
 						const char *d_name);
 
@@ -140,7 +141,7 @@ t_bool					ft_sort_util_atime(t_ent *ent1, t_ent *ent2);
 t_bool					ft_sort_util_atimerev(t_ent *ent1, t_ent *ent2);
 
 void					ft_proceed_printing(t_list_infos *list_holder,
-						t_ls_infos *infos);
+									t_ls_infos *infos, t_bool is_dir);
 
 void					ft_debug_options(t_opt *options);
 void					ft_debug_ls(t_ls *ls);

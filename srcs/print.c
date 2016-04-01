@@ -169,14 +169,14 @@ static void		ft_proceed_long_display(char *name, char *filepath,
 }
 
 void			ft_proceed_printing(t_list_infos *list_holder,
-									t_ls_infos *infos)
+									t_ls_infos *infos, t_bool is_dir)
 {
 	t_list		*tmp;
 	t_ent		*ent;
 
 	tmp = list_holder->list;
 	ent = tmp->content;
-	if (infos->options->l)
+	if (infos->options->l && is_dir)
 		ft_printf("total %u\n", list_holder->total);
 	while (tmp && (ent = tmp->content))
 	{
