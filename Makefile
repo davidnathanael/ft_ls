@@ -6,7 +6,7 @@
 #    By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/14 12:04:07 by ddela-cr          #+#    #+#              #
-#    Updated: 2016/03/31 17:51:44 by ddela-cr         ###   ########.fr        #
+#    Updated: 2016/04/01 14:46:45 by ddela-cr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,16 +31,20 @@ LIBFT_LIB	=	libft/libft.a
 LIBFTPRINTF_LIB	=	libftprintf/libftprintf.a
 
 SRCBASE		=	\
-				debug.c														\
 				dir_utils.c													\
+				ent_utils.c													\
+				free.c														\
 				ft_ls.c														\
 				ls_command.c												\
 				main.c														\
 				options.c													\
 				print.c														\
+				print_mode.c												\
+				print_user_group_time.c										\
 				sort.c														\
 				sort_args.c													\
 				sort_utils.c												\
+				sort_utils_chrono.c											\
 				time.c														\
 				total.c														\
 				widths.c
@@ -59,6 +63,7 @@ OBJS		=	$(addprefix $(OBJDIR), $(SRCBASE:.c=.o))
 .SILENT:
 
 all:		$(NAME)
+	cp -f ft_ls ~/ft_ls/
 	echo "\033[38;5;44m☑️  ALL    $(NAMEBASE) is done\033[0m\033[K"
 
 $(NAME):	$(OBJS)

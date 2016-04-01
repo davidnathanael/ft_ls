@@ -62,13 +62,16 @@ typedef struct			s_widths
 typedef struct			s_opt
 {
 	t_bool				has_options;
-	t_bool				l;
-	t_bool				r_upper;
 	t_bool				a;
+	t_bool				a_upper;
+	t_bool				c_upper;
+	t_bool				g;
+	t_bool				l;
+	t_bool				one;
 	t_bool				r;
+	t_bool				r_upper;
 	t_bool				t;
 	t_bool				t_upper;
-	t_bool				one;
 	t_bool				u;
 }						t_opt;
 
@@ -92,11 +95,11 @@ typedef struct			s_list_infos
 	t_widths			*widths;
 	unsigned int		total;
 	t_bool				has_maj_min;
+	unsigned int		max_len;
 }						t_list_infos;
 
 typedef struct			s_ent
 {
-	t_dirent			*ent;
 	char				*name;
 	char				*filepath;
 	long				mtime;
@@ -105,7 +108,6 @@ typedef struct			s_ent
 }						t_ent;
 
 void					ft_ls(char **av);
-
 
 void					ft_proceed_r_upper(char *dir_name, t_ls_infos *infos,
 							t_list_infos *list_holder, t_ent *ent);
@@ -116,6 +118,7 @@ t_bool					ft_is_ent(const char *path);
 t_bool					ft_is_dot(const char *d_name);
 char					*ft_get_full_path(const char *dir_name,
 						const char *d_name);
+t_bool					ft_check_option_a(char *name, t_opt *options);
 
 t_opt					*ft_get_ls_options(char **av);
 t_ls					*ft_get_ls_args(char **av, t_opt *options);
@@ -142,13 +145,15 @@ t_bool					ft_sort_util_atimerev(t_ent *ent1, t_ent *ent2);
 
 void					ft_proceed_printing(t_list_infos *list_holder,
 									t_ls_infos *infos, t_bool is_dir);
+void					ft_print_by_column(char *name, t_bool c_upper, int i,
+											unsigned int max_len);
+void					ft_print_type(mode_t mode);
+void					ft_print_permissions(mode_t mode);
+void					ft_print_user_group(t_stat filestat, t_widths *widths,
+											t_opt *options);
+void					ft_print_time(t_stat filestat, t_opt *options);
 
-void					ft_debug_options(t_opt *options);
-void					ft_debug_ls(t_ls *ls);
-void					ft_debug_list_dir(char *name);
-void					ft_debug_list(t_list *list);
-void					ft_debug_list_args(t_list *list);
-void					ft_debug_widths(t_widths *widths);
-void					ft_debug_arg_content(t_ent *content);
+void					ft_free_content(t_ent *content);
+void					ft_free_elem(t_list *elem);
 
 #endif

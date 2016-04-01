@@ -26,10 +26,21 @@ static t_opt	*ft_handle_other_options(t_opt *options, char arg)
 {
 	if (arg == 'T')
 		options->t_upper = TRUE;
-	if (arg == 'u')
+	else if (arg == 'u')
 		options->u = TRUE;
+	else if (arg == 'A')
+		options->a_upper = TRUE;
+	else if (arg == '1')
+	{
+		options->g = FALSE;
+		options->one = TRUE;
+	}
+	else if (arg == 'C')
+		options->c_upper = TRUE;
 	else
 		ft_handle_invalid_ls_option(arg, options);
+	if (options->t_upper || options->u || options->a_upper || options->one)
+		options->has_options = TRUE;
 	return (options);
 }
 
@@ -50,14 +61,14 @@ static t_opt	*ft_parse_ls_options(t_opt *options, char *arg)
 			options->r = TRUE;
 		else if (arg[i] == 't')
 			options->t = TRUE;
-		else if (arg[i] == '1')
-			options->one = TRUE;
+		else if (arg[i] == 'g')
+			options->g = TRUE;
 		else
 			options = ft_handle_other_options(options, arg[i]);
 		i++;
 	}
 	if (options->l || options->r_upper || options->a || options->r || options->t
-					|| options->one)
+					|| options->g)
 		options->has_options = TRUE;
 	return (options);
 }
@@ -70,13 +81,16 @@ static t_opt	*ft_init_ls_options(void)
 	if (!options)
 		return (NULL);
 	options->has_options = FALSE;
-	options->l = FALSE;
-	options->r_upper = FALSE;
 	options->a = FALSE;
+	options->a_upper = FALSE;
+	options->c_upper = FALSE;
+	options->g = FALSE;
+	options->l = FALSE;
+	options->one = FALSE;
 	options->r = FALSE;
+	options->r_upper = FALSE;
 	options->t = FALSE;
 	options->t_upper = FALSE;
-	options->one = FALSE;
 	options->u = FALSE;
 	return (options);
 }

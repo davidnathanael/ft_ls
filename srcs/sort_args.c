@@ -20,6 +20,17 @@ static t_list	*ft_push_dir_arg(t_list *list, t_list *new, t_ent *content,
 
 	tmp = list;
 	tmp_content = tmp->content;
+	if ((*cmp_func)(content, tmp_content))
+	{
+		if (tmp_content->is_dir)
+		{
+			list = new;
+			list->next = tmp;
+		}
+		else
+			list->next = new;
+		return (list);
+	}
 	while (tmp->next && (tmp_content = tmp->next->content)
 					&& !tmp_content->is_dir)
 		tmp = tmp->next;
@@ -39,6 +50,17 @@ static t_list	*ft_push_ent_arg(t_list *list, t_list *new, t_ent *content,
 
 	tmp = list;
 	tmp_content = tmp->content;
+	if ((*cmp_func)(content, tmp_content))
+	{
+		if (tmp_content->is_ent)
+		{
+			list = new;
+			list->next = tmp;
+		}
+		else
+			list->next = new;
+		return (list);
+	}
 	while (tmp->next && (tmp_content = tmp->next->content)
 					&& !tmp_content->is_ent)
 		tmp = tmp->next;

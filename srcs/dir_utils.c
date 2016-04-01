@@ -12,20 +12,40 @@
 
 #include "ft_ls.h"
 
-DIR				*ft_opendir(char *dir_name)
+void		ft_print_opendir_error(char *dir, int errno_save)
+{
+	int		len;
+	char	*to_print;
+
+	len = ft_strlen(dir);
+	to_print = NULL;
+	while (len && dir[len] != '/')
+		len--;
+	len = (dir[len] == '/') ? len + 1 : len;
+	to_print = ft_strsub(dir, len, ft_strlen(dir) - len);
+	ft_putstr_fd("ls: ", 2);
+	ft_putstr_fd(to_print, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(strerror(errno_save), 2);
+	ft_putchar_fd('\n', 2);
+	free(to_print);
+}
+
+DIR			*ft_opendir(char *dir_name)
 {
 	DIR			*dir;
+	int			errno_save;
 
 	dir = opendir(dir_name);
 	if (!dir)
 	{
-		fprintf(stderr, "Cannot open directory '%s': %s\n",
-			dir_name, strerror(errno));
+		errno_save = errno;
+		ft_print_opendir_error(dir_name, errno_save);
 	}
 	return (dir);
 }
 
-void			ft_closedir(DIR *dir, const char *dir_name)
+void		ft_closedir(DIR *dir, const char *dir_name)
 {
 	if (closedir(dir))
 	{
@@ -35,7 +55,7 @@ void			ft_closedir(DIR *dir, const char *dir_name)
 	}
 }
 
-t_bool			ft_is_dir(const char *path)
+t_bool		ft_is_dir(const char *path)
 {
 	t_stat		filestat;
 
@@ -44,23 +64,7 @@ t_bool			ft_is_dir(const char *path)
 	return (S_ISDIR(filestat.st_mode));
 }
 
-t_bool			ft_is_ent(const char *path)
-{
-	t_stat		filestat;
-
-	if (stat(path, &filestat) != 0)
-		return (FALSE);
-	return (TRUE);
-}
-
-t_bool			ft_is_dot(const char *d_name)
-{
-	if (ft_strcmp(d_name, "..") != 0 && ft_strcmp(d_name, ".") != 0)
-		return (FALSE);
-	return (TRUE);
-}
-
-char			*ft_get_full_path(const char *dir_name, const char *d_name)
+char		*ft_get_full_path(const char *dir_name, const char *d_name)
 {
 	char		*ret;
 	char		*tmp;

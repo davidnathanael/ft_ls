@@ -20,7 +20,6 @@ static t_ent	*ft_set_content(char *dir_name, t_dirent *entry,
 	content = (t_ent *)malloc(sizeof(t_ent));
 	if (!content)
 		return (NULL);
-	content->ent = entry;
 	content->name = ft_strdup(entry->d_name);
 	content->filepath = ft_get_full_path(dir_name, content->name);
 	content->is_dir = ft_is_dir(content->filepath);
@@ -102,7 +101,7 @@ t_list			*ft_get_sorted_list(char *dir_name,
 		return (NULL);
 	while ((entry = readdir(dir)) != NULL)
 	{
-		if (infos->options->a == FALSE && entry->d_name[0] == '.')
+		if (!ft_check_option_a(entry->d_name, infos->options))
 			continue;
 		list_holder->list = ft_insert_to_list(list_holder, infos,
 											dir_name, entry);

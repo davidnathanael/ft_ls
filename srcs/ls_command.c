@@ -25,7 +25,7 @@ static t_bool	ft_has_ls_args(t_ls *ls, char **av, unsigned int *index)
 	{
 		len = ft_strlen(av[i]);
 		if (av[i][0] != '-' || len == 1 || (len == 2 && av[i][1] == '-'))
-			break;
+			break ;
 		i++;
 	}
 	if (av[i] && len == 2 && av[i][1] == '-')

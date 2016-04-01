@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ls.c                                               :+:      :+:    :+:   */
+/*   ft_ls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddela-cr <ddela-cr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -34,6 +34,7 @@ static void		ft_list_dir(char *dir_name, t_ls_infos *infos, t_bool is_last)
 	list_holder = (t_list_infos *)malloc(sizeof(*list_holder));
 	list_holder->widths = ft_init_widths();
 	list_holder->total = 0;
+	list_holder->max_len = 0;
 	list_holder->has_maj_min = FALSE;
 	list_holder->list = ft_get_sorted_list(dir_name, list_holder, infos);
 	if (infos->ls->nb_args > 1)
@@ -67,7 +68,6 @@ void			ft_proceed_r_upper(char *dir_name, t_ls_infos *infos,
 			path_length = ft_strlen(path);
 			if (path_length >= PATH_MAX)
 			{
-				ft_printf("Path length has got too long.\n");
 				free(path);
 				exit(EXIT_FAILURE);
 			}
@@ -86,7 +86,6 @@ void			ft_ls(char **av)
 	infos = (t_ls_infos *)malloc(sizeof(*infos));
 	infos->options = ft_get_ls_options(av);
 	infos->ls = ft_get_ls_args(av, infos->options);
-	// ft_debug_ls(infos->ls);
 	content = (infos->ls->has_args) ? infos->ls->sorted_args->content : NULL;
 	if (!infos->ls->has_args)
 		ft_list_dir(".", infos, TRUE);
@@ -100,8 +99,8 @@ void			ft_ls(char **av)
 			else if (!content->is_dir)
 				ft_list_ent(content, infos);
 			else
-				ft_list_dir(content->name, infos, (!infos->ls->sorted_args->next)
-													? TRUE : FALSE);
+				ft_list_dir(content->name, infos,
+						(!infos->ls->sorted_args->next) ? TRUE : FALSE);
 			infos->ls->sorted_args = infos->ls->sorted_args->next;
 		}
 	}

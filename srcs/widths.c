@@ -12,6 +12,15 @@
 
 #include "ft_ls.h"
 
+static void	ft_update_maj_min_len(t_stat filestat, t_ent *ent,
+								t_list_infos *list_holder)
+{
+	if (S_ISBLK(filestat.st_mode) || S_ISCHR(filestat.st_mode))
+		list_holder->has_maj_min = TRUE;
+	if (ft_strlen(ent->name) > list_holder->max_len)
+		list_holder->max_len = ft_strlen(ent->name);
+}
+
 void		ft_update_widths(t_ent *ent, t_list_infos *list_holder)
 {
 	t_widths	*widths;
@@ -19,25 +28,24 @@ void		ft_update_widths(t_ent *ent, t_list_infos *list_holder)
 
 	widths = list_holder->widths;
 	if (lstat(ent->filepath, &filestat) < 0)
-	{
-		ft_printf("stat() failed if ft_update_widths : stat(%s)\n",
-					ent->filepath);
 		return ;
-	}
 	if (ft_nbrlen(filestat.st_nlink) + NB_LINKS_MINWIDTH > widths->nb_links)
 		widths->nb_links = ft_nbrlen(filestat.st_nlink) + NB_LINKS_MINWIDTH;
-	if (ft_strlen(getpwuid(filestat.st_uid)->pw_name) + USER_MINWIDTH > widths->user)
-		widths->user = ft_strlen(getpwuid(filestat.st_uid)->pw_name) + USER_MINWIDTH;
-	if (ft_strlen(getgrgid(filestat.st_gid)->gr_name) + GROUP_MINWIDTH > widths->group)
-		widths->group = ft_strlen(getgrgid(filestat.st_gid)->gr_name) + GROUP_MINWIDTH;
+	if (ft_strlen(getpwuid(filestat.st_uid)->pw_name)
+							+ USER_MINWIDTH > widths->user)
+		widths->user = ft_strlen(getpwuid(filestat.st_uid)->pw_name)
+							+ USER_MINWIDTH;
+	if (ft_strlen(getgrgid(filestat.st_gid)->gr_name)
+							+ GROUP_MINWIDTH > widths->group)
+		widths->group = ft_strlen(getgrgid(filestat.st_gid)->gr_name)
+							+ GROUP_MINWIDTH;
 	if (ft_nbrlen(filestat.st_size) + SIZE_MINWIDTH > widths->size)
 		widths->size = ft_nbrlen(filestat.st_size) + SIZE_MINWIDTH;
 	if (ft_nbrlen(major(filestat.st_rdev)) + MAJ_MINWIDTH > widths->maj)
 		widths->maj = ft_nbrlen(major(filestat.st_rdev)) + MAJ_MINWIDTH;
 	if (ft_nbrlen(minor(filestat.st_rdev)) + MIN_MINWIDTH > widths->min)
 		widths->min = ft_nbrlen(minor(filestat.st_rdev)) + MIN_MINWIDTH;
-	if (S_ISBLK(filestat.st_mode) || S_ISCHR(filestat.st_mode))
-		list_holder->has_maj_min = TRUE;
+	ft_update_maj_min_len(filestat, ent, list_holder);
 }
 
 t_widths	*ft_init_widths(void)
