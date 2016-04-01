@@ -49,7 +49,7 @@ void		ft_closedir(DIR *dir, const char *dir_name)
 {
 	if (closedir(dir))
 	{
-		fprintf(stderr, "Could not close '%s': %s\n",
+		ft_printf("Could not close '%s': %s\n",
 			dir_name, strerror(errno));
 		exit(EXIT_FAILURE);
 	}
